@@ -1,11 +1,12 @@
 import { MessageCircle } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 const SimpleAIAssistant = () => {
   return (
     <Link href='/chat'>
       <div className="max-w-sm  bg-black rounded-xl shadow-lg flex items-center ">
         {/* AI Assistant Photo */}
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=200&h=200&fit=crop&crop=face"
           alt="AI Assistant"
           className="w-40 h-40 rounded-full object-cover border-2 border-gray-500"

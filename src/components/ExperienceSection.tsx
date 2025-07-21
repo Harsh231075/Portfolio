@@ -72,7 +72,7 @@ const ExperienceSection = () => {
 };
 
 // Optional: highlight keywords like React.js, MongoDB, etc.
-const highlightTech = (text) => {
+const highlightTech = (text: string) => {
   const keywords = ["React.js", "JavaScript", "Node.js", "Express.js", "MongoDB", "Git", "GitHub"];
   const parts = text.split(new RegExp(`(${keywords.join("|")})`, "gi"));
   return parts.map((part, i) =>

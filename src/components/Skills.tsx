@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const skills = [
   { name: "MERN Stack", icon: "/mern.png" },
@@ -46,7 +47,7 @@ const Skills = () => {
               >
                 {/* Circular Icon */}
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                  <img
+                  <Image
                     src={`${skill.icon}`} // Replace with your skill icons
                     alt={skill.name}
                     className="w-16 h-16 rounded-full "

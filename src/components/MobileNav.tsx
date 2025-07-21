@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaPhoneAlt, FaEnvelope, FaExternalLinkAlt, FaComments } from 'react-icons/fa';
+import { FaEnvelope, FaComments } from 'react-icons/fa';
+import Image from 'next/image';
 
 export default function MobileBottomNav() {
   return (
@@ -13,7 +14,7 @@ export default function MobileBottomNav() {
         <div className="absolute -top-6 bg-gradient-to-r from-red-500 to-indigo-500 text-white text-[10px] px-2 py-1 rounded-full shadow-md animate-bounce">
           Acheivemnt
         </div>
-        <img src="/award.png" alt="Phone" className="w-6 h-6 object-contain" />
+        <Image src="/award.png" alt="Phone" className="w-6 h-6 object-contain" />
       </a>
 
       {/* Gmail */}
@@ -35,7 +36,7 @@ export default function MobileBottomNav() {
         <div className="absolute -top-6  bg-gradient-to-r from-red-500 to-indigo-500 text-white text-[10px] px-2 py-1 rounded-full shadow-md animate-bounce">
           Projects
         </div>
-        <img src="/project.png" alt="project" className="w-6 h-6 object-contain text-white" />
+        <Image src="/project.png" alt="project" className="w-6 h-6 object-contain text-white" />
 
       </a>
 
