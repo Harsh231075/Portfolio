@@ -11,14 +11,14 @@ interface VideoCardProps {
 
 const VideoCard: React.FC<VideoCardProps> = ({ title, description, videoSrc }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current) {
       videoRef.current.play();
-      setIsPlaying(true);
+      // setIsPlaying(true);
     }
   };
 
