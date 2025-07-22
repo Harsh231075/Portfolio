@@ -48,6 +48,8 @@ const Skills = () => {
                 {/* Circular Icon */}
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
                   <Image
+                    width={100}
+                    height={100}
                     src={`${skill.icon}`} // Replace with your skill icons
                     alt={skill.name}
                     className="w-16 h-16 rounded-full "

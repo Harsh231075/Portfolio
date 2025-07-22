@@ -109,27 +109,27 @@ const Hero = () => {
             </div>
 
             {/* Right Content */}
-            <div className="w-full order-1 lg:order-2 relative lg:w-1/2 boader-none sm:pt-0 lg:pt-40 ">
+            <div className="w-full order-1 lg:order-2 relative lg:w-1/2 boader-none sm:pt-0 lg:pt-46 ">
 
               {/* Image - full cover on lg */}
-              <div className="relative w-full h-[300px] sm:h-[150px] lg:h-[600px] mt-20 lg:mt-0">
+              <div className="relative w-full h-[300px] sm:h-[200px] lg:h-[600px] mt-20 lg:mt-0">
                 <Image
                   src="/Myphoto.png"
                   alt="Cybersecurity Professional"
                   fill
-                  className=" object-none w-full h-full rounded-lgl bg-transparent px-0  lg:px-20 lg:py-0"
+                  className=" object-fit md:object-none w-full h-full rounded-lgl bg-transparent px-0  lg:px-20 lg:py-0 "
                   priority
                 />
               </div>
               {/* Floating Boxes - thoda photo se gap diya */}
-              <div className="hidden lg:flex flex-col gap-6 absolute top-10 right-0 z-10 backdrop-blur-md rounded-xl shadow-lg">
+              <div className="hidden lg:flex flex-col gap-6 absolute top-10  right-0 z-10 backdrop-blur-md rounded-xl shadow-lg">
                 <Counter target={2} label="Years of experience" />
                 <Counter target={15} label="Completed projects" />
                 <Counter target={12} label="Hackathons participated" />
               </div>
 
               {/* Mobile view - boxes below image */}
-              <div className="lg:hidden mt-4 flex justify-center gap-4 px-4 overflow-x-auto scrollbar-hide">
+              <div className="lg:hidden  flex justify-center gap-4 px-4 overflow-x-auto scrollbar-hide">
                 <Counter target={2} label="Years of experience" />
                 <Counter target={15} label="Completed projects" />
                 <Counter target={12} label="Hackathons participated" />
@@ -137,6 +137,8 @@ const Hero = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-0">
       </div>
     </section>
   )
