@@ -5,6 +5,7 @@ import certificates from '@/Data/Certificates';
 import Footer from '@/components/Footer';
 import MobileBottomNav from '@/components/MobileNav';
 import Header from '@/components/Header';
+import Image from 'next/image';
 
 
 function page() {
@@ -40,9 +41,7 @@ function page() {
                   }`}
               >
                 <div className="relative overflow-hidden">
-                  <img
-                    src={cert.image}
-                    alt={cert.title}
+                  <Image src={cert.image} alt={cert.title} width={400} height={192}
                     className="w-full h-48 object-cover transition-transform duration-500 hover:scale-110"
                   />
                   <div className="absolute top-4 right-4 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-semibold">

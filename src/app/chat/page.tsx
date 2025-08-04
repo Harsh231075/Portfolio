@@ -234,7 +234,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { FaHome } from 'react-icons/fa';
 import Link from 'next/link';
-import MobileBottomNav from '@/components/MobileNav';
+
 
 interface Message {
   sender: "user" | "assistant";
@@ -256,7 +256,7 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = (e: any) => {
+  const sendMessage = (e: React.FormEvent) => {
     e.preventDefault?.();
     if (!input.trim()) return;
     setMessages((msgs) => [
