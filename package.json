@@ -6,19 +6,32 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "embed-data": "tsx scripts/embedData.ts"
   },
   "dependencies": {
+    "@datastax/astra-db-ts": "^1.5.0",
+    "@google/genai": "^1.12.0",
+    "@langchain/community": "^0.3.49",
+    "@langchain/core": "^0.3.66",
     "@react-three/drei": "^10.3.0",
     "@react-three/fiber": "^9.1.2",
     "@splinetool/react-spline": "^4.0.0",
+    "axios": "^1.11.0",
+    "dotenv": "^17.2.1",
     "framer-motion": "^12.23.6",
+    "groq-sdk": "^0.29.0",
+    "langchain": "^0.3.30",
     "lucide-react": "^0.518.0",
     "next": "15.3.4",
+    "pdf-parse": "^1.1.1",
+    "puppeteer": "^24.15.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
     "react-icons": "^5.5.0",
-    "three": "^0.177.0"
+    "three": "^0.177.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -29,6 +42,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   }
 }
