@@ -18,7 +18,7 @@
     "@react-three/fiber": "^9.1.2",
     "@splinetool/react-spline": "^4.0.0",
     "axios": "^1.11.0",
-    "dotenv": "^17.2.1",
+    "dotenv": "^16.4.5",
     "framer-motion": "^12.23.6",
     "groq-sdk": "^0.29.0",
     "langchain": "^0.3.30",
