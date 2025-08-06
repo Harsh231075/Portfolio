@@ -5,10 +5,12 @@ const Footer = () => {
   return (
     <footer className="w-full bg-black text-white py-8 px-4 pb-25 md:py-4">
       <div className="max-w-6xl mx-auto flex flex-col items-center justify-center gap-6 ">
-        <p className="text-sm md:text-2xl flex items-center">
-          Created with <FaHeart className="inline mx-2 text-red-500 animate-pulse" /> by
-          <span className="font-semibold text-xl ml-1">Harsh Singh Baghel</span>
+        <p className="text-sm md:text-2xl flex items-center leading-snug">
+          Created with
+          <FaHeart className="inline mx-2 text-red-500 animate-pulse relative top-[1px]" />
+          by <span className="font-semibold text-base sm:text-lg md:text-xl ml-1">Harsh Singh Baghel</span>
         </p>
+
 
         <div className="flex items-center justify-center gap-6 bg-gray-700/30 px-6 py-3 rounded-full">
           <a

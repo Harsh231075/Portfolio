@@ -7,13 +7,15 @@ const nextConfig: NextConfig = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-poppins)'],
+        sans: ['IBM Plex Sans', 'var(--font-poppins)'],
+        mono: ['IBM Plex Mono', 'var(--font-ibm-plex-mono)'],
       },
     },
   },
   experimental: {
     serverComponentsExternalPackages: ["puppeteer"],
   },
+
 };
 
 export default nextConfig;

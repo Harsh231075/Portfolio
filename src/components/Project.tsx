@@ -36,7 +36,7 @@ const Project = () => {
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-tight">
             Creative
             <span className="block bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-              Portfolio
+              Projects
             </span>
           </h1>
 

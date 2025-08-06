@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Poppins } from 'next/font/google'
+// import { Poppins } from 'next/font/google'
 import "./globals.css";
 
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '600'], // normal and bold
-  variable: '--font-poppins',
-})
+// const poppins = Poppins({
+//   subsets: ['latin'],
+//   weight: ['400', '600'], // normal and bold
+//   variable: '--font-poppins',
+// })
 
 export const metadata: Metadata = {
   title: "Harsh Singh Baghel",
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={poppins.variable}
+      // className={poppins.variable}
       >
         {children}
       </body>

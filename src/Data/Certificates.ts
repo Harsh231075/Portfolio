@@ -3,11 +3,11 @@
 const certificates = [
   {
     id: 1,
-    title: "Advanced React Development",
+    title: "Win VoidHack6.0 hackthon",
     issuer: "Tech Academy",
     date: "December 2024",
     description: "Comprehensive certification covering advanced React patterns, state management, and performance optimization.",
-    image: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "/cartificate/c-3.jpeg",
     credentialId: "REACT-2024-001",
     skills: ["React", "Redux", "TypeScript", "Performance"]
   },
@@ -17,7 +17,7 @@ const certificates = [
     issuer: "CodeCraft Institute",
     date: "November 2024",
     description: "Complete full-stack development certification covering frontend, backend, and database technologies.",
-    image: "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "/cartificate/c-5.jpeg",
     credentialId: "FULL-2024-002",
     skills: ["JavaScript", "Node.js", "MongoDB", "React"]
   },
@@ -27,17 +27,17 @@ const certificates = [
     issuer: "CloudTech Solutions",
     date: "October 2024",
     description: "Advanced certification in cloud infrastructure design, deployment, and management.",
-    image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "/cartificate/c-2.jpeg",
     credentialId: "CLOUD-2024-003",
     skills: ["AWS", "Docker", "Kubernetes", "DevOps"]
   },
   {
     id: 4,
-    title: "UI/UX Design Specialist",
-    issuer: "Design Academy",
+    title: "Win VoidHack6.0 hackthon",
+    issuer: "Svvv college",
     date: "September 2024",
     description: "Professional certification in user interface and user experience design principles.",
-    image: "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "/cartificate/c-1.jpeg",
     credentialId: "DESIGN-2024-004",
     skills: ["Figma", "Adobe XD", "Prototyping", "User Research"]
   },
@@ -47,7 +47,7 @@ const certificates = [
     issuer: "Mobile Masters",
     date: "August 2024",
     description: "Comprehensive mobile development certification covering iOS and Android platforms.",
-    image: "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "/cartificate/c-3.jpeg",
     credentialId: "MOBILE-2024-005",
     skills: ["React Native", "Flutter", "Swift", "Kotlin"]
   },
@@ -57,7 +57,7 @@ const certificates = [
     issuer: "DataTech University",
     date: "July 2024",
     description: "Advanced certification in data science, machine learning, and statistical analysis.",
-    image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "/cartificate/c-1.jpeg",
     credentialId: "DATA-2024-006",
     skills: ["Python", "Machine Learning", "SQL", "Tableau"]
   }
