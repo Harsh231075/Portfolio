@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Eye, Github, Info, Filter } from 'lucide-react';
 import MobileBottomNav from '@/components/MobileNav';
+import Chat from '@/components/Chat';
 
 interface VideoCardProps {
   title: string;
@@ -241,6 +242,7 @@ const ProjectGallery: React.FC = () => {
             </div>
           </>
         )}
+        <Chat />
         <MobileBottomNav />
       </div>
 

@@ -104,7 +104,7 @@ const Hero = () => {
           {/* Right Content */}
           <div className="w-full order-1 lg:order-2 relative lg:w-1/2">
             {/* Image Container */}
-            <div className="relative w-full h-[380px] sm:h-[320px] md:h-[360px] lg:h-[600px] mt-0 md:mt-6 lg:mt-0">
+            <div className="relative w-full h-[400px] sm:h-[320px] md:h-[360px] lg:h-[600px] mt-0 md:mt-6 lg:mt-0">
 
               <Image
                 src="/Myphoto.png"
