@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { Eye, Github, Info, Filter } from 'lucide-react';
 import MobileBottomNav from '@/components/MobileNav';
 import Chat from '@/components/Chat';
+import { useRouter } from 'next/navigation';
 
 interface VideoCardProps {
+  id: string;
   title: string;
   description: string;
   videoSrc: string;
@@ -13,8 +15,9 @@ interface VideoCardProps {
   link?: string;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ title, description, videoSrc, GitHub, link }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ id, title, description, videoSrc, GitHub, link }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -29,8 +32,10 @@ const VideoCard: React.FC<VideoCardProps> = ({ title, description, videoSrc, Git
 
   };
 
-  const handleDetails = (link: string) => {
-    <a href={link} target="_blank" rel="noopener noreferrer"></a>
+  const handleDetails = (id: string) => {
+
+    router.push(`/portfolio/${id}`);
+
   };
 
   return (
@@ -76,7 +81,8 @@ const VideoCard: React.FC<VideoCardProps> = ({ title, description, videoSrc, Git
             </div>
           </button>
 
-          <button onClick={() => link && handleDetails} className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110">
+
+          <button onClick={() => link && handleDetails(id)} className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110">
             <Info size={16} />
             <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap">
               Details
@@ -91,6 +97,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ title, description, videoSrc, Git
 };
 
 interface Project {
+  id: string;
   title: string;
   description: string;
   videoSrc: string;
@@ -110,6 +117,7 @@ const ProjectGallery: React.FC = () => {
 
   const mockProjects: Project[] = [
     {
+      id: '1',
       title: 'Smart AI Teacher',
       description: 'Voice-based AI educator for online learning',
       videoSrc: '/bg.mp4',
@@ -118,6 +126,7 @@ const ProjectGallery: React.FC = () => {
       link: 'https://github.com'
     },
     {
+      id: '2',
       title: 'NGO Donation Platform',
       description: 'Connecting NGOs and donors through tech',
       videoSrc: '/bg.mp4',
@@ -126,6 +135,7 @@ const ProjectGallery: React.FC = () => {
       link: 'https://github.com'
     },
     {
+      id: '3',
       title: 'Code Review Pro',
       description: 'AI-powered code reviewing platform',
       videoSrc: '/bg.mp4',
@@ -134,6 +144,7 @@ const ProjectGallery: React.FC = () => {
       link: 'https://github.com'
     },
     {
+      id: '4',
       title: 'Pallax World',
       description: 'Parallax scroll demo for web design',
       videoSrc: '/bg.mp4',
@@ -221,6 +232,7 @@ const ProjectGallery: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
               {filteredProjects.map((project: Project, index: number) => (
+                // <Link href={`/portfolio/${project.id}`} key={index}>
                 <div
                   key={index}
                   className="opacity-0 animate-fade-in"
@@ -230,6 +242,7 @@ const ProjectGallery: React.FC = () => {
                   }}
                 >
                   <VideoCard
+                    id={project.id}
                     title={project.title}
                     description={project.description}
                     videoSrc={project.videoSrc}
@@ -238,6 +251,7 @@ const ProjectGallery: React.FC = () => {
                     link={project.link}
                   />
                 </div>
+                // </Link>
               ))}
             </div>
           </>

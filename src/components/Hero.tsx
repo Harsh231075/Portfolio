@@ -71,7 +71,7 @@ const TypingText = ({
     </span>
   )
 }
-
+// "नमस्ते,"
 const Hero = () => {
   return (
     <section className="min-h-screen bg-black relative overflow-hidden flex items-center ">
@@ -82,13 +82,13 @@ const Hero = () => {
           <div className="w-full order-2 lg:order-1 lg:w-1/2 text-center lg:text-left  lg:mt-0">
             <div>
               <p className="text-gray-400 text-sm md:text-lg min-h-[30px] md:min-h-[36px] lg:min-h-[44px]">
-                <TypingText texts={["Hey there,", "नमस्ते,"]} speed={80} pause={1500} />
+                <TypingText texts={["Hey there,",]} speed={80} pause={1500} />
               </p>
               <h1 className="text-xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight  md:min-h-[80px] lg:min-h-[120px]">
                 <TypingText
                   texts={[
                     "I'm Harsh singh baghel",
-                    "I'm हर्ष सिंह बघेल",
+                    // "I'm हर्ष सिंह बघेल",
                   ]}
                   speed={60}
                   pause={2000}
