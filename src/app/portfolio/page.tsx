@@ -118,8 +118,8 @@ const ProjectGallery: React.FC = () => {
   const mockProjects: Project[] = [
     {
       id: '1',
-      title: 'Smart AI Teacher',
-      description: 'Voice-based AI educator for online learning',
+      title: 'NextGen Learn',
+      description: 'Unlock Your True Potential with AI-Powered Personalized Learning!',
       videoSrc: '/bg.mp4',
       category: 'major',
       GitHub: 'https://github.com',
@@ -127,8 +127,8 @@ const ProjectGallery: React.FC = () => {
     },
     {
       id: '2',
-      title: 'NGO Donation Platform',
-      description: 'Connecting NGOs and donors through tech',
+      title: 'Self-Learning',
+      description: 'AI-Powered Self-Learning Platform 1.0 is Live!',
       videoSrc: '/bg.mp4',
       category: 'mini',
       GitHub: 'https://github.com',
@@ -136,8 +136,8 @@ const ProjectGallery: React.FC = () => {
     },
     {
       id: '3',
-      title: 'Code Review Pro',
-      description: 'AI-powered code reviewing platform',
+      title: 'College Website',
+      description: 'A modern, responsive, and interactive college website',
       videoSrc: '/bg.mp4',
       category: 'major',
       GitHub: 'https://github.com',
@@ -145,8 +145,8 @@ const ProjectGallery: React.FC = () => {
     },
     {
       id: '4',
-      title: 'Pallax World',
-      description: 'Parallax scroll demo for web design',
+      title: 'E-Commerce Platform',
+      description: 'e-commerce platform with usrer/admin authentication and a seamless shopping experience.',
       videoSrc: '/bg.mp4',
       category: 'mini',
       GitHub: 'https://github.com',

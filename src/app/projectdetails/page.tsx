@@ -159,7 +159,9 @@ const ProjectDetailsPage = () => {
                     className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index ? 'border-blue-500' : isDark ? 'border-gray-600' : 'border-gray-200'
                       }`}
                   >
-                    <img
+                    <Image
+                      width={800}
+                      height={500}
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
                       className="w-full h-full object-cover"

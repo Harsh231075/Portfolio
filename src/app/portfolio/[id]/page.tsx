@@ -1,62 +1,33 @@
 
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Github, ExternalLink, Calendar, User, Code, Star, Eye, GitBranch, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
+import projectData from '@/Data/Project'; // Importing the project data
 
 const ProjectDetailsPage = () => {
-  const [isDark, setIsDark] = React.useState(false);
+  const [isDark, setIsDark] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const params = useParams();
   const id = parseInt(params.id as string);
-  console.log("Project ID:", id);
+  // console.log("Project ID:", id);
 
+  const project = projectData.find((p) => p.id === id);
+
+  // console.log("Matched Project:", projectData);
+
+  if (!project) {
+    return <div>Project not found</div>;
+  }
 
   const toggleTheme = () => {
     setIsDark(!isDark);
   };
-  // Dummy project data - you can replace this with dynamic data later
-  const project = {
-    id: 1,
-    title: "E-Commerce Dashboard",
-    subtitle: "Modern Admin Panel for Online Store Management",
-    description: "A comprehensive e-commerce dashboard built with React and Node.js that provides real-time analytics, inventory management, and customer insights. This project demonstrates modern web development practices with a focus on performance and user experience.",
-    longDescription: "This e-commerce dashboard is a full-featured admin panel designed for online store owners and managers. It includes advanced features like real-time sales analytics, inventory tracking, customer management, and order processing. The dashboard is built with a modern tech stack ensuring scalability and maintainability. The UI is designed with accessibility in mind and provides a smooth user experience across all devices.",
-    images: [
-      "/hacker.webp",
-      "/java.png",
-      "/c++.png"
-    ],
-    techStack: [
-      "React", "Next.js", "TypeScript", "Node.js", "MongoDB",
-      "Tailwind CSS", "Redux", "Express.js", "JWT", "Stripe API"
-    ],
-    features: [
-      "Real-time analytics and reporting",
-      "Inventory management system",
-      "Customer relationship management",
-      "Order processing and tracking",
-      "Payment integration with Stripe",
-      "Responsive design for all devices",
-      "Role-based access control",
-      "Data export functionality"
-    ],
-    liveUrl: "https://demo-ecommerce-dashboard.vercel.app",
-    githubUrl: "https://github.com/username/ecommerce-dashboard",
-    createdDate: "March 2024",
-    category: "Full Stack",
-    status: "Completed",
-    duration: "3 months",
-    teamSize: "Solo Project",
-    stats: {
-      stars: 42,
-      forks: 15,
-      watchers: 8
-    }
-  };
 
-  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -164,7 +135,10 @@ const ProjectDetailsPage = () => {
                     className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors ${currentImageIndex === index ? 'border-blue-500' : isDark ? 'border-gray-600' : 'border-gray-200'
                       }`}
                   >
-                    <img
+                    <Image
+                      width={800}
+                      height={500}
+                      loading="lazy"
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
                       className="w-full h-full object-cover"
