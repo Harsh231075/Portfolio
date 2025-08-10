@@ -35,8 +35,8 @@ const certificates = [
 
   {
     id: 6,
-    title: "Data Science & Analytics",
-    description: "Advanced certification in data science, machine learning, and statistical analysis.",
+    title: "HTML & CSS",
+    description: "Comprehensive course covering the fundamentals of HTML5 and CSS3 for creating modern, responsive websites.",
     image: "/cartificate/c-1.jpeg"
   }
 ];
