@@ -11,9 +11,11 @@ const Project = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden
+     bg-[url('https://static.vecteezy.com/system/resources/previews/010/042/254/non_2x/dark-green-luxury-background-with-indian-mandala-ornament-elegant-and-classic-illustration-vector.jpg')]
+      ">
       {/* Background Video */}
-      <video
+      {/* <video
         autoPlay
         loop
         muted
@@ -22,13 +24,16 @@ const Project = () => {
       >
         <source src="/bg.mp4" type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </video> */}
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/60 z-10" />
 
       {/* Main Content */}
-      <div className="relative z-20 flex flex-col items-center justify-center text-center min-h-screen px-4">
+      <div className="relative z-20 flex flex-col items-center justify-center text-center min-h-screen px-4
+       bg-[url('https://static.vecteezy.com/system/resources/previews/010/042/254/non_2x/dark-green-luxury-background-with-indian-mandala-ornament-elegant-and-classic-illustration-vector.jpg')]
+      bg-cover bg-center text-white
+      ">
         <div
           className={`transition-all duration-1000 ease-out ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}

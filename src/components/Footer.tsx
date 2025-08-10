@@ -3,7 +3,10 @@ import { MdEmail } from "react-icons/md";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-black text-white py-8 px-4 pb-25 md:py-4">
+    <footer className="w-full bg-black text-white py-8 px-4 pb-25 md:py-4
+    
+    bg-[url('https://cbeditz.com/public/cbeditz/thumbnail/black-and-silver-border-powerpoint-background-26-11619258171d5sg6fbt8a.webp')] 
+    bg-no-repeat bg-cover bg-center boader boader-top-white solid">
       <div className="max-w-6xl mx-auto flex flex-col items-center justify-center gap-6 ">
         <p className="text-sm md:text-2xl flex items-center leading-snug">
           Created with

@@ -18,6 +18,7 @@ interface VideoCardProps {
 
 const VideoCard: React.FC<VideoCardProps> = ({ id, title, description, videoSrc, GitHub, link }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
+
   const router = useRouter();
 
   const handleMouseEnter = () => {
