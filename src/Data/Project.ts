@@ -15,7 +15,7 @@ const project = [
       "/projects/NextGen/chatbot.png",
       "/projects/NextGen/leaderboard.png",
       "/projects/NextGen/community.png",
-      "/projects/NextGen/learning.png",
+      "/projects/NextGen/cartifaicate.png",
       "/projects/NextGen/reffreral.png",
     ],
     techStack: [
