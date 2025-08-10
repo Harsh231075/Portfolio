@@ -8,7 +8,7 @@ const project = [
     images: [
       "/projects/NextGen/Banner.png",
       "/projects/NextGen/dashboard.png",
-      "/projects/NextGen/learning.png",
+      "/projects/NextGen/n-3.png",
       "/projects/NextGen/test.png",
       "/projects/NextGen/result.png",
       "/projects/NextGen/feedback.png",
