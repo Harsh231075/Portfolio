@@ -4,6 +4,7 @@ import { Eye, Github, Info, Filter } from 'lucide-react';
 import MobileBottomNav from '@/components/MobileNav';
 import Chat from '@/components/Chat';
 import { useRouter } from 'next/navigation';
+// import Link from 'next/link';
 
 interface VideoCardProps {
   id: string;
@@ -66,7 +67,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ id, title, description, videoSrc,
 
         <div className={`absolute top-4 left-4 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
           <button onClick={() => GitHub && handleGithub(GitHub)} className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110">
-            <Github size={16} />
+            <a href={GitHub} target="_blank" rel="noopener noreferrer">    <Github size={16} /> </a>
             <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap">
               GitHub
             </div>
@@ -75,7 +76,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ id, title, description, videoSrc,
 
         <div className={`absolute top-4 right-4 flex gap-2 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
           <button onClick={() => link && handleView(link)} className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110">
-            <Eye size={16} />
+            <a href={link} target="_blank" rel="noopener noreferrer"> <Eye size={16} /></a>
             <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap">
               View
             </div>
@@ -122,8 +123,8 @@ const ProjectGallery: React.FC = () => {
       description: 'Unlock Your True Potential with AI-Powered Personalized Learning!',
       videoSrc: '/bg.mp4',
       category: 'major',
-      GitHub: 'https://github.com',
-      link: 'https://github.com'
+      GitHub: 'https://github.com/Harsh231075/NextGen_Learn',
+      link: 'https://next-gen-learn-eta.vercel.app/'
     },
     {
       id: '2',
@@ -131,26 +132,44 @@ const ProjectGallery: React.FC = () => {
       description: 'AI-Powered Self-Learning Platform 1.0 is Live!',
       videoSrc: '/bg.mp4',
       category: 'mini',
-      GitHub: 'https://github.com',
-      link: 'https://github.com'
+      GitHub: 'https://github.com/Harsh231075/Self_Learning',
+      link: 'https://self-learning-4xv7.vercel.app/'
     },
     {
       id: '3',
-      title: 'College Website',
-      description: 'A modern, responsive, and interactive college website',
-      videoSrc: '/bg.mp4',
-      category: 'major',
-      GitHub: 'https://github.com',
-      link: 'https://github.com'
-    },
-    {
-      id: '4',
       title: 'E-Commerce Platform',
       description: 'e-commerce platform with usrer/admin authentication and a seamless shopping experience.',
       videoSrc: '/bg.mp4',
       category: 'mini',
-      GitHub: 'https://github.com',
-      link: 'https://github.com'
+      GitHub: 'https://github.com/Harsh231075/shoping',
+      link: 'https://shoping-git-main-harsh-singhs-projects-a7a5f95c.vercel.app/'
+    },
+    {
+      id: '4',
+      title: 'College Website',
+      description: 'A modern, responsive, and interactive college website',
+      videoSrc: '/bg.mp4',
+      category: 'major',
+      GitHub: 'https://github.com/Harsh231075/College',
+      link: 'https://college-hazel.vercel.app/'
+    },
+    {
+      id: '5',
+      title: 'CodeReviewPro',
+      description: 'An AI-powered code review and learning platform with typing test and certification.',
+      videoSrc: '/bg.mp4',
+      category: 'major',
+      GitHub: 'https://github.com/Harsh231075/CodeReviewPro',
+      link: '"https://code-review-pro.vercel.app/'
+    },
+    {
+      id: '6',
+      title: 'URL Shortener',
+      description: 'A full-stack URL shortener with analytics, authentication, and user-specific dashboards.',
+      videoSrc: '/bg.mp4',
+      category: 'major',
+      GitHub: 'https://github.com/Harsh231075/url_shortner',
+      link: "https://url-shortner-lemon-rho.vercel.app/"
     },
   ];
 

@@ -90,7 +90,7 @@ const project = [
     }
   },
   {
-    id: 3,
+    id: 4,
     title: "College Website (Frontend Only)",
     subtitle: "A modern, responsive, and interactive college website built with React.js and Tailwind CSS.",
     description:
@@ -137,7 +137,7 @@ const project = [
     }
   },
   {
-    id: 4,
+    id: 3,
     title: "Full-Stack E-Commerce Platform",
     subtitle: "A powerful MERN stack e-commerce platform with secure authentication, product management, and a seamless shopping experience.",
     description:
@@ -186,7 +186,100 @@ const project = [
       forks: 0,
       watchers: 0
     }
+  },
+
+  {
+    id: 5,
+    title: "Code Review Pro",
+    subtitle: "An AI-powered code review and learning platform with typing test and certification.",
+    description:
+      "Code Review Pro integrates AI APIs in the backend to automate code reviews, provide improvement suggestions, and help users enhance their coding skills. It also offers a typing test feature with certificates for performance.",
+    longDescription:
+      "Code Review Pro is a mini-project designed to integrate AI APIs in the backend for automated code reviews and skill enhancement. Users can submit code in any programming language and receive AI-generated feedback, including mistake identification and suggestions for improvement. The platform also includes a typing test feature, allowing users to assess their typing speed and accuracy, and earn a certificate based on performance. This project provided valuable experience in backend development, API integration, and AI-based automation. Special thanks to Kritagya Jaiswal for creating an amazing project video!",
+    images: [
+      "/projects/code-review-pro/home.png",
+      "/projects/code-review-pro/code-submit.png",
+      "/projects/code-review-pro/review-feedback.png",
+      "/projects/code-review-pro/typing-test.png",
+      "/projects/code-review-pro/certificate.png"
+    ],
+    techStack: [
+      "React",
+      "Node.js",
+      "Express.js",
+      "Tailwind CSS",
+      "AI API Integration",
+      "JavaScript"
+    ],
+    features: [
+      "AI-powered code review for multiple programming languages",
+      "Mistake detection and improvement suggestions",
+      "Typing test with accuracy and speed tracking",
+      "Automatic certificate generation based on performance",
+      "Clean and responsive UI design"
+    ],
+    liveUrl: "https://code-review-pro.vercel.app/",
+    githubUrl: "https://github.com/Harsh231075/CodeReviewPro",
+    createdDate: "08 may 2025",
+    category: "Full Stack",
+    status: "Completed",
+    duration: "1 week",
+    teamSize: "solo",
+    stats: {
+      stars: 0,
+      forks: 0,
+      watchers: 0
+    }
+  },
+  {
+    id: 6,
+    title: "LinkShort — URL Shortener App",
+    subtitle: "A full-stack URL shortener with analytics, authentication, and user-specific dashboards.",
+    description:
+      "LinkShort is a full-stack URL shortener application built with React, Node.js, and MongoDB. It allows users to shorten long URLs, view analytics, and manage personal URL history with secure authentication.",
+    longDescription:
+      "LinkShort is a complete URL shortener platform that provides both functionality and analytics for users. Built using React.js, Node.js, Express.js, and MongoDB, it enables users to shorten long URLs instantly, view click counts, and filter by date or popularity. JWT authentication ensures secure login/register functionality, and each user has their own dashboard to manage URLs. The application also includes features like copy-to-clipboard, visit buttons, and filtering options. Zustand is used for global state management, and the platform is fully responsive with a clean Tailwind CSS UI. Deployed on Vercel (frontend) and Render (backend) for a production-ready experience.",
+    images: [
+      "/projects/linkshort/home.png",
+      "/projects/linkshort/dashboard.png",
+      "/projects/linkshort/stats.png",
+      "/projects/linkshort/auth.png"
+    ],
+    techStack: [
+      "React",
+      "Tailwind CSS",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "JWT",
+      "Zustand"
+    ],
+    features: [
+      "Instant URL shortening",
+      "User authentication via JWT (Login/Register)",
+      "User-specific URL history",
+      "Click count and creation date tracking",
+      "Filter URLs by date range",
+      "Filter by click count",
+      "Copy short URL and visit buttons",
+      "Profile dashboard with stats",
+      "Global state management with Zustand",
+      "Fully responsive UI"
+    ],
+    liveUrl: "https://url-shortner-lemon-rho.vercel.app/",
+    githubUrl: "https://github.com/Harsh231075/url_shortner",
+    createdDate: "08 August 2025",
+    category: "Full Stack",
+    status: "Completed",
+    duration: "1 week",
+    teamSize: "solo",
+    stats: {
+      stars: 0,
+      forks: 0,
+      watchers: 0
+    }
   }
+
 
 
 ]
