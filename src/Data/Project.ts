@@ -282,8 +282,6 @@ const project = [
     }
   }
 
-
-
 ]
 
 

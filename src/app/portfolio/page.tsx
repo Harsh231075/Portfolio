@@ -131,7 +131,7 @@ const ProjectGallery: React.FC = () => {
       title: 'Self-Learning',
       description: 'AI-Powered Self-Learning Platform 1.0 is Live!',
       videoSrc: '/bg.mp4',
-      category: 'mini',
+      category: 'major',
       GitHub: 'https://github.com/Harsh231075/Self_Learning',
       link: 'https://self-learning-4xv7.vercel.app/'
     },
@@ -140,7 +140,7 @@ const ProjectGallery: React.FC = () => {
       title: 'E-Commerce Platform',
       description: 'e-commerce platform with usrer/admin authentication and a seamless shopping experience.',
       videoSrc: '/bg.mp4',
-      category: 'mini',
+      category: 'major',
       GitHub: 'https://github.com/Harsh231075/shoping',
       link: 'https://shoping-git-main-harsh-singhs-projects-a7a5f95c.vercel.app/'
     },
@@ -149,7 +149,7 @@ const ProjectGallery: React.FC = () => {
       title: 'College Website',
       description: 'A modern, responsive, and interactive college website',
       videoSrc: '/bg.mp4',
-      category: 'major',
+      category: 'mini',
       GitHub: 'https://github.com/Harsh231075/College',
       link: 'https://college-hazel.vercel.app/'
     },
@@ -158,7 +158,7 @@ const ProjectGallery: React.FC = () => {
       title: 'CodeReviewPro',
       description: 'An AI-powered code review and learning platform with typing test and certification.',
       videoSrc: '/bg.mp4',
-      category: 'major',
+      category: 'mini',
       GitHub: 'https://github.com/Harsh231075/CodeReviewPro',
       link: '"https://code-review-pro.vercel.app/'
     },
@@ -167,7 +167,7 @@ const ProjectGallery: React.FC = () => {
       title: 'URL Shortener',
       description: 'A full-stack URL shortener with analytics, authentication, and user-specific dashboards.',
       videoSrc: '/bg.mp4',
-      category: 'major',
+      category: 'mini',
       GitHub: 'https://github.com/Harsh231075/url_shortner',
       link: "https://url-shortner-lemon-rho.vercel.app/"
     },
