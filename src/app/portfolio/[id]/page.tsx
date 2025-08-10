@@ -109,6 +109,29 @@ const ProjectDetailsPage = () => {
               </div>
             </div>
 
+            {/* Video Section */}
+            {project.videoUrl && (<div className={`rounded-lg shadow-sm border transition-colors duration-300 p-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+              <h2 className={`text-xl font-semibold mb-4 transition-colors duration-300 ${isDark ? 'text-white' : 'text-gray-900'}`}>Project Explanation Video</h2>
+
+              {/* Video Container */}
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                <iframe
+                  src={project.videoUrl}
+                  title={`${project.title} - Project Explanation`}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+
+              {/* Video Description */}
+              <div className="mt-4">
+                <p className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Watch this detailed walkthrough to understand the project architecture, key features, and implementation details.
+                </p>
+              </div>
+            </div>)}
+
             {/* Project Images */}
             <div className={`rounded-lg shadow-sm border transition-colors duration-300 p-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
               <h2 className={`text-xl font-semibold mb-4 transition-colors duration-300 ${isDark ? 'text-white' : 'text-gray-900'}`}>Screenshots</h2>
