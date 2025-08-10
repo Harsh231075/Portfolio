@@ -11,7 +11,7 @@ const Header = () => {
 
           {/* Download CV Button */}
           <Link
-            href="/Harsh-singh-baghel-resume.pdf" // <-- Replace with actual resume path
+            href="/Harsh-singh.pdf" // <-- Replace with actual resume path
             target="_blank"
             rel="noopener noreferrer"
             className="bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-500 transition-colors shadow"

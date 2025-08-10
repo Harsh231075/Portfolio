@@ -6,10 +6,10 @@ const project = [
     description: "NextGen Learn is an AI-powered e-learning platform designed to revolutionize online education through personalized learning paths, real-time AI assistance, and engaging gamification. Unlike traditional platforms, it offers adaptive roadmaps, instant doubt resolution via AI chatbots, community collaboration, and a rewarding 'earn while you learn' system to keep learners motivated and progressing effectively.",
     longDescription: "NextGen Learn addresses the limitations of current e-learning systems by integrating AI-driven personalization, instant doubt-solving, and interactive gamification. The platform analyzes each learner’s performance to create customized roadmaps, recommends resources dynamically, and uses AI chatbots for real-time guidance. Learners can collaborate in an active community, track their progress on leaderboards, and even monetize their contributions. Built with React, Next.js, Node.js, MongoDB, and Tailwind CSS, the system ensures scalability, responsiveness, and a superior user experience.",
     images: [
-      "/projects/NextGen/banner.png",
+      "/projects/NextGen/Banner.png",
       "/projects/NextGen/dashboard.png",
       "/projects/NextGen/learning.png",
-      "/projects/NextGen/Test.png",
+      "/projects/NextGen/test.png",
       "/projects/NextGen/result.png",
       "/projects/NextGen/feedback.png",
       "/projects/NextGen/chatbot.png",
