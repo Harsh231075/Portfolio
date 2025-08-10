@@ -197,11 +197,11 @@ const project = [
     longDescription:
       "Code Review Pro is a mini-project designed to integrate AI APIs in the backend for automated code reviews and skill enhancement. Users can submit code in any programming language and receive AI-generated feedback, including mistake identification and suggestions for improvement. The platform also includes a typing test feature, allowing users to assess their typing speed and accuracy, and earn a certificate based on performance. This project provided valuable experience in backend development, API integration, and AI-based automation. Special thanks to Kritagya Jaiswal for creating an amazing project video!",
     images: [
-      "/projects/code-review-pro/home.png",
-      "/projects/code-review-pro/code-submit.png",
-      "/projects/code-review-pro/review-feedback.png",
-      "/projects/code-review-pro/typing-test.png",
-      "/projects/code-review-pro/certificate.png"
+      "/code/c-1.png",
+      "/code/c-2.png",
+      "/code/c-3.png",
+      "/code/c-4.png",
+      "/code/c-5.png"
     ],
     techStack: [
       "React",
@@ -240,10 +240,12 @@ const project = [
     longDescription:
       "LinkShort is a complete URL shortener platform that provides both functionality and analytics for users. Built using React.js, Node.js, Express.js, and MongoDB, it enables users to shorten long URLs instantly, view click counts, and filter by date or popularity. JWT authentication ensures secure login/register functionality, and each user has their own dashboard to manage URLs. The application also includes features like copy-to-clipboard, visit buttons, and filtering options. Zustand is used for global state management, and the platform is fully responsive with a clean Tailwind CSS UI. Deployed on Vercel (frontend) and Render (backend) for a production-ready experience.",
     images: [
-      "/projects/linkshort/home.png",
-      "/projects/linkshort/dashboard.png",
-      "/projects/linkshort/stats.png",
-      "/projects/linkshort/auth.png"
+      "/linkshort/u-1.png",
+      "/linkshort/u-2.png",
+      "/linkshort/u-3.png",
+      "/linkshort/u-4.png",
+      "/linkshort/u-5.png",
+      "/linkshort/u-6.png"
     ],
     techStack: [
       "React",
@@ -268,7 +270,7 @@ const project = [
     ],
     liveUrl: "https://url-shortner-lemon-rho.vercel.app/",
     githubUrl: "https://github.com/Harsh231075/url_shortner",
-    createdDate: "08 August 2025",
+    createdDate: "15 july 2025",
     category: "Full Stack",
     status: "Completed",
     duration: "1 week",
