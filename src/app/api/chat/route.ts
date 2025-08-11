@@ -21,8 +21,11 @@ export async function POST(req: Request) {
     const context = await searchRelevantChunks(question);
     const answer = await getGroqChatResponse(question, context, sid);
     return NextResponse.json({ answer });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      return NextResponse.json({ error: e.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: "An unknown error occurred." }, { status: 500 });
   }
 }
 

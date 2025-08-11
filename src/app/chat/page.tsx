@@ -92,15 +92,15 @@ export default function ChatPage() {
             >
               <div
                 className={`px-4 py-3 rounded-2xl max-w-[80%] sm:max-w-[70%] lg:max-w-[60%] shadow-lg transform transition-all duration-200 hover:scale-[1.02] ${msg.sender === "user"
-                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md"
-                    : "bg-white text-gray-800 rounded-bl-md border-l-4 border-purple-500"
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md"
+                  : "bg-white text-gray-800 rounded-bl-md border-l-4 border-purple-500"
                   }`}
               >
                 <div className="text-sm sm:text-base leading-relaxed break-words">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      strong: ({ node, ...props }) => (
+                      strong: ({ ...props }) => (
                         <mark className="bg-yellow-200 px-1 rounded font-semibold" {...props} />
                       ),
                       ul: (props) => <ul className="list-disc ml-5 space-y-1" {...props} />,
