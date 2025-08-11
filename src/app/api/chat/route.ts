@@ -1,25 +1,28 @@
 // app/api/chat/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { searchRelevantChunks } from "@/lib/vectorSearch";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { getGroqChatResponse } from "@/lib/groqChat";
+import { searchRelevantChunks } from "@/lib/vectorSearch";
 
-export async function POST(req: NextRequest) {
-  const { question } = await req.json();
-
-  // const question = 'How is harsh singh baghel?';
-
-  if (!question) {
-    return NextResponse.json({ error: "No question provided" }, { status: 400 });
+export async function POST(req: Request) {
+  try {
+    const { question } = await req.json();
+    const jar = await cookies();
+    let sid = jar.get("chat_sid")?.value;
+    if (!sid) {
+      sid = crypto.randomUUID();
+      jar.set("chat_sid", sid, {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
+    }
+    const context = await searchRelevantChunks(question);
+    const answer = await getGroqChatResponse(question, context, sid);
+    return NextResponse.json({ answer });
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
-
-  const context = await searchRelevantChunks(question);
-  if (!context) {
-    console.log("No relevant context found for the question:", context);
-    return NextResponse.json({ error: "No relevant context found" }, { status: 404 });
-
-  }
-  const answer = await getGroqChatResponse(question, context as string);
-
-  return NextResponse.json({ answer });
 }
 

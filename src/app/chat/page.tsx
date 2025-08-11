@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { FaHome } from "react-icons/fa";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Message {
   sender: "user" | "assistant";
@@ -86,24 +88,36 @@ export default function ChatPage() {
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"
-                } px-4 sm:px-6 w-full`}
+              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} px-4 sm:px-6 w-full`}
             >
               <div
                 className={`px-4 py-3 rounded-2xl max-w-[80%] sm:max-w-[70%] lg:max-w-[60%] shadow-lg transform transition-all duration-200 hover:scale-[1.02] ${msg.sender === "user"
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md"
-                  : "bg-white text-gray-800 rounded-bl-md border-l-4 border-purple-500"
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md"
+                    : "bg-white text-gray-800 rounded-bl-md border-l-4 border-purple-500"
                   }`}
               >
-                <p className="text-sm sm:text-base leading-relaxed break-words">
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: msg.text
-                        .replace(/\*\*(.*?)\*\*/g, "<mark>$1</mark>") // highlight **text**
-                        .replace(/\*/g, ""), // remove single * characters
+                <div className="text-sm sm:text-base leading-relaxed break-words">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      strong: ({ node, ...props }) => (
+                        <mark className="bg-yellow-200 px-1 rounded font-semibold" {...props} />
+                      ),
+                      ul: (props) => <ul className="list-disc ml-5 space-y-1" {...props} />,
+                      ol: (props) => <ol className="list-decimal ml-5 space-y-1" {...props} />,
+                      li: (props) => <li className="leading-snug" {...props} />,
+                      p: (props) => <p className="mb-2 last:mb-0" {...props} />,
+                      code: (props) => (
+                        <code className="bg-gray-200 text-pink-600 px-1 py-0.5 rounded text-xs" {...props} />
+                      ),
+                      pre: (props) => (
+                        <pre className="bg-gray-900 text-gray-100 p-3 rounded-md overflow-x-auto text-xs" {...props} />
+                      ),
                     }}
-                  />
-                </p>
+                  >
+                    {msg.text}
+                  </ReactMarkdown>
+                </div>
               </div>
             </div>
           ))}
