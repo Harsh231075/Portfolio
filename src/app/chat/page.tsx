@@ -13,19 +13,29 @@ interface Message {
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
-    {
-      sender: "assistant",
-      text: "Hello! How can I help you today?",
-    },
+    { sender: "assistant", text: "Hello! How can I help you today?" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputBarRef = useRef<HTMLDivElement>(null);
+  const [bottomPad, setBottomPad] = useState(140);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const updatePad = () => {
+      if (inputBarRef.current) {
+        setBottomPad(inputBarRef.current.offsetHeight + 48); // bar height + extra space
+      }
+    };
+    updatePad();
+    window.addEventListener("resize", updatePad);
+    return () => window.removeEventListener("resize", updatePad);
+  }, []);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages, loading]);
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault?.();
@@ -77,11 +87,11 @@ export default function ChatPage() {
 
       {/* Main chat area - Full width with smooth scroll */}
       <main
-        className="flex-1 w-full overflow-y-auto overflow-x-hidden p-2 sm:p-4 pb-24 bg-cover bg-center bg-no-repeat bg-fixed scroll-smooth"
+        className="flex-1 w-full overflow-y-auto overflow-x-hidden p-2 sm:p-4 pb-0 bg-cover bg-center bg-no-repeat bg-fixed scroll-smooth"
         style={{
           backgroundImage:
             "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://media.istockphoto.com/id/1216688115/vector/seamless-pattern-with-social-media-elements.jpg?s=612x612&w=0&k=20&c=5c_iSGEPfiNFNKsR2cZaix1plXGuTip3gYF9RYSsCIo=')",
-          scrollBehavior: 'smooth'
+          paddingBottom: bottomPad
         }}
       >
         <div className="w-full max-w-none space-y-4 mt-2">
@@ -133,12 +143,16 @@ export default function ChatPage() {
               </div>
             </div>
           )}
-          <div ref={bottomRef}></div>
+          <div style={{ height: 8 }} />
+          <div ref={bottomRef} />
         </div>
       </main>
 
       {/* Fixed bottom input bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 p-3 sm:p-4 shadow-lg">
+      <div
+        ref={inputBarRef}
+        className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 p-3 sm:p-4 shadow-lg"
+      >
         <div className="max-w-4xl mx-auto">
           <form onSubmit={sendMessage} className="flex items-center gap-2 sm:gap-3">
             <input

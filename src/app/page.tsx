@@ -10,6 +10,7 @@ import Ui from "@/components/Ui";
 import Footer from "@/components/Footer";
 import Chat from "@/components/Chat";
 
+
 export default function Home() {
   return (
     <>
