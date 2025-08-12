@@ -4,6 +4,10 @@ import { Eye, Github, Info, Filter } from 'lucide-react';
 import MobileBottomNav from '@/components/MobileNav';
 import Chat from '@/components/Chat';
 import { useRouter } from 'next/navigation';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import SectionWrapper from '@/components/SectionWrapper';
+
 // import Link from 'next/link';
 
 interface VideoCardProps {
@@ -184,101 +188,110 @@ const ProjectGallery: React.FC = () => {
     { key: 'major', label: 'Major Projects', count: mockProjects.filter((p: Project) => p.category === 'major').length }
   ];
 
-  return (
+  return (<>
+
+
     <div className="min-h-screen bg-black text-white">
-      {/* Header Section */}
-      <div className=" bg-[url('https://media.istockphoto.com/id/1248520802/photo/display-stand-design-3d-rendering.jpg?s=612x612&w=0&k=20&c=q0CfjDPB3gcLD_g1hHE3ltE-KS5qt_pDPVRlNz-iIFw=')] bg-cover bg-center bg-no-repeat">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="text-center mb-8">
-            <h1 className=" text-2xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              Project Gallery
-            </h1>
-            <p className="text-sm md:text-xl text-gray-400 max-w-2xl mx-auto">
-              Explore my collection of innovative projects, from mini experiments to major applications
-            </p>
-          </div>
-
-          {/* Filter Buttons */}
-          <div className="w-full overflow-x-auto">
-            <div className="flex gap-3 sm:gap-4 px-2 sm:px-0 py-2 sm:py-4 justify-start sm:justify-center min-w-max sm:min-w-0">
-              {filterButtons.map(({ key, label, count }) => (
-                <button
-                  key={key}
-                  onClick={() => setFilter(key)}
-                  className={`group relative px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm rounded-lg sm:rounded-xl font-medium transition-all duration-300 flex items-center gap-1 sm:gap-2 whitespace-nowrap
-          ${filter === key
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25'
-                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white border border-gray-700 hover:border-gray-600'}
-        `}
-                >
-                  <Filter size={14} className="sm:size-4" />
-                  <span>{label}</span>
-                  <span
-                    className={`text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full 
-            ${filter === key ? 'bg-white/20' : 'bg-gray-700 group-hover:bg-gray-600'}`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-        </div>
+      <div className="pb-15">
+        <Header />
       </div>
+      <SectionWrapper >
+        {/* Header Section */}
+        <div className=" bg-[url('https://media.istockphoto.com/id/1248520802/photo/display-stand-design-3d-rendering.jpg?s=612x612&w=0&k=20&c=q0CfjDPB3gcLD_g1hHE3ltE-KS5qt_pDPVRlNz-iIFw=')] bg-cover bg-center bg-no-repeat">
+          <div className="max-w-7xl mx-auto px-6 py-12">
+            <div className="text-center mb-8">
+              <h1 className=" text-2xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                Project Gallery
+              </h1>
+              <p className="text-sm md:text-xl text-gray-400 max-w-2xl mx-auto">
+                Explore my collection of innovative projects, from mini experiments to major applications
+              </p>
+            </div>
 
-      {/* Projects Grid */}
-      <div className=" mx-auto px-6 md:px-24 py-12 bg-[url('https://media.istockphoto.com/id/1140265911/photo/modern-brick-wall-3d-rendering.jpg?s=612x612&w=0&k=20&c=T_ObRkTzdFtYkBAekQoXFvrTkI5j8VXVXGjQEwRyi1g=')] bg-cover bg-center bg-no-repeat">
-        {filteredProjects.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">🎯</div>
-            <h3 className="text-2xl font-bold text-gray-400 mb-2">No projects found</h3>
-            <p className="text-gray-500">Try selecting a different filter</p>
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-between items-center mb-8">
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-                <h2 className="text-2xl font-bold text-gray-200">
-                  {filter === 'all' ? 'All Projects' :
-                    filter === 'mini' ? 'Mini Projects' : 'Major Projects'}
-                </h2>
-                <span className="text-sm text-gray-500 bg-gray-800 px-3 py-1 rounded-full">
-                  {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
-                </span>
+            {/* Filter Buttons */}
+            <div className="w-full overflow-x-auto">
+              <div className="flex gap-3 sm:gap-4 px-2 sm:px-0 py-2 sm:py-4 justify-start sm:justify-center min-w-max sm:min-w-0">
+                {filterButtons.map(({ key, label, count }) => (
+                  <button
+                    key={key}
+                    onClick={() => setFilter(key)}
+                    className={`group relative px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm rounded-lg sm:rounded-xl font-medium transition-all duration-300 flex items-center gap-1 sm:gap-2 whitespace-nowrap
+          ${filter === key
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white border border-gray-700 hover:border-gray-600'}
+        `}
+                  >
+                    <Filter size={14} className="sm:size-4" />
+                    <span>{label}</span>
+                    <span
+                      className={`text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full 
+            ${filter === key ? 'bg-white/20' : 'bg-gray-700 group-hover:bg-gray-600'}`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-              {filteredProjects.map((project: Project, index: number) => (
-                // <Link href={`/portfolio/${project.id}`} key={index}>
-                <div
-                  key={index}
-                  className="opacity-0 animate-fade-in"
-                  style={{
-                    animationDelay: `${index * 0.1}s`,
-                    animationFillMode: 'forwards'
-                  }}
-                >
-                  <VideoCard
-                    id={project.id}
-                    title={project.title}
-                    description={project.description}
-                    videoSrc={project.videoSrc}
-                    category={project.category}
-                    GitHub={project.GitHub}
-                    link={project.link}
-                  />
-                </div>
-                // </Link>
-              ))}
+          </div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className=" mx-auto px-6 md:px-24 py-12 bg-[url('https://media.istockphoto.com/id/1140265911/photo/modern-brick-wall-3d-rendering.jpg?s=612x612&w=0&k=20&c=T_ObRkTzdFtYkBAekQoXFvrTkI5j8VXVXGjQEwRyi1g=')] bg-cover bg-center bg-no-repeat">
+          {filteredProjects.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="text-6xl mb-4">🎯</div>
+              <h3 className="text-2xl font-bold text-gray-400 mb-2">No projects found</h3>
+              <p className="text-gray-500">Try selecting a different filter</p>
             </div>
-          </>
-        )}
-        <Chat />
-        <MobileBottomNav />
-      </div>
+          ) : (
+            <>
+              <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
+                  <h2 className="text-2xl font-bold text-gray-200">
+                    {filter === 'all' ? 'All Projects' :
+                      filter === 'mini' ? 'Mini Projects' : 'Major Projects'}
+                  </h2>
+                  <span className="text-sm text-gray-500 bg-gray-800 px-3 py-1 rounded-full">
+                    {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                {filteredProjects.map((project: Project, index: number) => (
+                  // <Link href={`/portfolio/${project.id}`} key={index}>
+                  <div
+                    key={index}
+                    className="opacity-0 animate-fade-in"
+                    style={{
+                      animationDelay: `${index * 0.1}s`,
+                      animationFillMode: 'forwards'
+                    }}
+                  >
+                    <VideoCard
+                      id={project.id}
+                      title={project.title}
+                      description={project.description}
+                      videoSrc={project.videoSrc}
+                      category={project.category}
+                      GitHub={project.GitHub}
+                      link={project.link}
+                    />
+                  </div>
+                  // </Link>
+                ))}
+              </div>
+            </>
+          )}
+
+          <Chat />
+          <MobileBottomNav />
+        </div>
+      </SectionWrapper>
+      <Footer />
 
       {/* Custom CSS for animations */}
       <style jsx>{`
@@ -297,6 +310,8 @@ const ProjectGallery: React.FC = () => {
         }
       `}</style>
     </div>
+
+  </>
   );
 };
 

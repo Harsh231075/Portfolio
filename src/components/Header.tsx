@@ -2,8 +2,17 @@ import React from 'react';
 import Link from 'next/link';
 import { Github } from 'lucide-react';
 import { FaLinkedinIn } from 'react-icons/fa';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
+  const pathname = usePathname();
+
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/portfolio', label: 'Projects' },
+    { href: '/achievements', label: 'Achievements' },
+  ];
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -11,7 +20,7 @@ const Header = () => {
 
           {/* Download CV Button */}
           <Link
-            href="/Harsh-singh.pdf" // <-- Replace with actual resume path
+            href="/Harsh-singh.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-500 transition-colors shadow"
@@ -21,18 +30,18 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-red-500 font-medium hover:text-red-400 transition-colors">
-              Home
-            </Link>
-            {/* <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
-              About
-            </Link> */}
-            <Link href="/portfolio" className="text-gray-300 hover:text-red-400 transition-colors">
-              Projects
-            </Link>
-            <Link href="/achievements" className="text-white-500 font-medium hover:text-red-400 transition-colors">
-              achievements
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`font-medium transition-colors ${pathname === link.href
+                  ? 'text-red-500'
+                  : 'text-white hover:text-red-400'
+                  }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           {/* Social Icons */}
