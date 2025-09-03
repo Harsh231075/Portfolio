@@ -7,27 +7,24 @@ import { useRouter } from 'next/navigation';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import SectionWrapper from '@/components/SectionWrapper';
+import Image from 'next/image';
 
 // import Link from 'next/link';
 
-interface VideoCardProps {
+interface ImageCardProps {
   id: string;
   title: string;
   description: string;
-  videoSrc: string;
+  imageSrc: string;
   category: 'mini' | 'major';
   GitHub?: string;
   link?: string;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ id, title, description, videoSrc, GitHub, link }) => {
+const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, imageSrc, GitHub, link }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
-
   const router = useRouter();
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+  const handleMouseEnter = () => setIsHovered(true);
 
   const handleGithub = (link: string) => {
     <a href={link} target="_blank" rel="noopener noreferrer"></a>
@@ -45,25 +42,21 @@ const VideoCard: React.FC<VideoCardProps> = ({ id, title, description, videoSrc,
   };
 
   return (
-    <div className="flex items-center justify-center p-4 ">
+    <div className="flex items-center justify-center p-4">
       <div
         className="relative w-full max-w-sm group cursor-pointer overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-3xl"
         onMouseEnter={handleMouseEnter}
+        style={{ height: 320 }} // fixed height for card
       >
-        <div className="relative w-full h-64">
-          <video
-            className="w-full h-full object-cover rounded-2xl"
-            autoPlay
-            muted
-            loop
-            preload="metadata"
-          >
-            <source src={videoSrc} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-
+        <div className="relative w-full h-full aspect-[4/3]">
+          <Image
+            className="w-full h-full object-cover rounded-2xl bg-black"
+            src={imageSrc}
+            alt={title}
+            loading="lazy"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+          />
           <div className={`absolute inset-0 bg-black/20 bg-opacity-30 transition-all duration-300 rounded-2xl ${isHovered ? 'bg-opacity-50' : ''}`} />
-
           <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent rounded-b-2xl transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <h3 className="text-white text-lg font-bold mb-2">{title}</h3>
             <p className="text-gray-200 text-sm">{description}</p>
@@ -106,7 +99,7 @@ interface Project {
   id: string;
   title: string;
   description: string;
-  videoSrc: string;
+  imageSrc: string;
   category: 'mini' | 'major';
   GitHub?: string;
   link?: string
@@ -126,7 +119,7 @@ const ProjectGallery: React.FC = () => {
       id: '1',
       title: 'NextGen Learn',
       description: 'Unlock Your True Potential with AI-Powered Personalized Learning!',
-      videoSrc: '/bg.mp4',
+      imageSrc: '/projects/NextGen/p2.png',
       category: 'major',
       GitHub: 'https://github.com/Harsh231075/NextGen_Learn',
       link: 'https://next-gen-learn-eta.vercel.app/'
@@ -135,7 +128,7 @@ const ProjectGallery: React.FC = () => {
       id: '2',
       title: 'Self-Learning',
       description: 'AI-Powered Self-Learning Platform 1.0 is Live!',
-      videoSrc: '/bg.mp4',
+      imageSrc: '/projects/SelfLearning/p1.png',
       category: 'major',
       GitHub: 'https://github.com/Harsh231075/Self_Learning',
       link: 'https://self-learning-4xv7.vercel.app/'
@@ -144,7 +137,7 @@ const ProjectGallery: React.FC = () => {
       id: '3',
       title: 'E-Commerce Platform',
       description: 'e-commerce platform with usrer/admin authentication and a seamless shopping experience.',
-      videoSrc: '/bg.mp4',
+      imageSrc: '/projects/ecommerce/p4.png',
       category: 'major',
       GitHub: 'https://github.com/Harsh231075/shoping',
       link: 'https://shoping-git-main-harsh-singhs-projects-a7a5f95c.vercel.app/'
@@ -153,7 +146,7 @@ const ProjectGallery: React.FC = () => {
       id: '4',
       title: 'College Website',
       description: 'A modern, responsive, and interactive college website',
-      videoSrc: '/bg.mp4',
+      imageSrc: '/projects/college/p5.png',
       category: 'mini',
       GitHub: 'https://github.com/Harsh231075/College',
       link: 'https://college-hazel.vercel.app/'
@@ -162,7 +155,7 @@ const ProjectGallery: React.FC = () => {
       id: '5',
       title: 'CodeReviewPro',
       description: 'An AI-powered code review and learning platform with typing test and certification.',
-      videoSrc: '/bg.mp4',
+      imageSrc: '/code/p3.png',
       category: 'mini',
       GitHub: 'https://github.com/Harsh231075/CodeReviewPro',
       link: '"https://code-review-pro.vercel.app/'
@@ -171,7 +164,7 @@ const ProjectGallery: React.FC = () => {
       id: '6',
       title: 'URL Shortener',
       description: 'A full-stack URL shortener with analytics, authentication, and user-specific dashboards.',
-      videoSrc: '/bg.mp4',
+      imageSrc: '/linkshort/p6.png',
       category: 'mini',
       GitHub: 'https://github.com/Harsh231075/url_shortner',
       link: "https://url-shortner-lemon-rho.vercel.app/"
@@ -271,11 +264,11 @@ const ProjectGallery: React.FC = () => {
                       animationFillMode: 'forwards'
                     }}
                   >
-                    <VideoCard
+                    <ImageCard
                       id={project.id}
                       title={project.title}
                       description={project.description}
-                      videoSrc={project.videoSrc}
+                      imageSrc={project.imageSrc}
                       category={project.category}
                       GitHub={project.GitHub}
                       link={project.link}

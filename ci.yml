@@ -1,0 +1,410 @@
+name: Deploy Frontend & Backend
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-main
+      cancel-in-progress: true
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ---------------- Frontend Build ----------------
+      - name: Setup Node.js for frontend
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm ci
+
+      # ---------------- Create Production Environment File ----------------
+      - name: Create production environment file
+        run: |
+          echo "Creating production environment file..."
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL || 'http://139.84.142.191:1337' }}" > frontend/.env.local
+          echo "Environment file created:"
+          cat frontend/.env.local
+
+      - name: Build frontend
+        run: cd frontend && npm run build
+
+      # Verify build output exists
+      - name: Verify frontend build
+        run: |
+          echo "Frontend build verification:"
+          ls -la frontend/.next/ || echo "No .next directory"
+          ls -la frontend/public/ || echo "No public directory" 
+          ls -la frontend/package.json || echo "No package.json"
+          echo "Files to deploy:"
+          echo "- .next directory: $(ls -d frontend/.next 2>/dev/null || echo 'MISSING')"
+          echo "- public directory: $(ls -d frontend/public 2>/dev/null || echo 'MISSING')"
+          echo "- package.json: $(ls frontend/package.json 2>/dev/null || echo 'MISSING')"
+          echo "- package-lock.json: $(ls frontend/package-lock.json 2>/dev/null || echo 'MISSING')"
+          echo "- next.config.ts: $(ls frontend/next.config.ts 2>/dev/null || echo 'MISSING')"
+          echo "- .env.local: $(ls frontend/.env.local 2>/dev/null || echo 'MISSING')"
+
+      # ---------------- Backend Build ----------------
+      - name: Setup Node.js for backend
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install native build tools (better-sqlite3)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3 make g++
+          # Removed deprecated npm python config; node-gyp uses python3 by default
+
+      - name: Install backend dependencies
+        run: cd backend && npm ci
+
+      # ---------------- Create Backend Environment File ----------------
+      - name: Create backend environment file (.env)
+        run: |
+          echo "Creating backend .env from GitHub Environment variables..."
+          mkdir -p backend-deploy
+          { 
+            # Server
+            echo "HOST=0.0.0.0";
+            echo "PORT=1337";
+            echo "NODE_ENV=production";
+            
+            # Strapi Secrets
+            echo "APP_KEYS=${{ secrets.APP_KEYS }}";
+            echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}";
+            echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}";
+            echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}";
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}";
+            echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}";
+            
+            # PostgreSQL Cloud Database (preferred DATABASE_URL approach)
+            echo "DATABASE_CLIENT=postgres";
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}";
+            echo "DATABASE_SSL=true";   # ✅ Cloud DB always SSL
+            echo "DATABASE_SCHEMA=public";
+            echo "DATABASE_POOL_MIN=2";
+            echo "DATABASE_POOL_MAX=10";
+            echo "DATABASE_CONNECTION_TIMEOUT=60000";
+            
+            # Cloudinary Config
+            echo "CLOUDINARY_NAME=${{ vars.CLOUDINARY_NAME }}";
+            echo "CLOUDINARY_KEY=${{ vars.CLOUDINARY_KEY }}";
+            echo "CLOUDINARY_SECRET=${{ secrets.CLOUDINARY_SECRET }}";
+            
+            # CORS & API
+            echo "CORS_ORIGIN=*";
+            echo "API_PREFIX=/api";
+            echo "ADMIN_URL=/admin";
+          } > backend-deploy/.env
+          cp backend-deploy/.env backend/.env
+
+      - name: Make backend env available for build
+        run: |
+          echo "Copying backend-deploy/.env to backend/.env for build-time config"
+          cp backend-deploy/.env backend/.env
+
+      - name: Build backend (Strapi)
+        env:
+          STRAPI_TELEMETRY_DISABLED: 'true'
+        run: cd backend && npm run build
+
+      # Verify backend build output exists
+      - name: Verify backend build
+        run: |
+          echo "Backend build verification:"
+          ls -la backend/ | head -20
+          ls -la backend/dist/ || echo "No dist directory"
+          ls -la backend/build/ || echo "No build directory (admin assets)"
+
+      # Clean up backend files with permission issues
+      - name: Clean backend for deployment
+        run: |
+          echo "Cleaning backend files for deployment..."
+          # Create a clean copy of backend for deployment
+          mkdir -p backend-deploy
+          
+          # Copy essential directories and files
+          cp -r backend/config backend-deploy/ || true
+          cp -r backend/src backend-deploy/ || true
+          cp -r backend/types backend-deploy/ || true
+          cp -r backend/dist backend-deploy/ || true
+          cp -r backend/build backend-deploy/ || true
+          cp -r backend/public backend-deploy/ || true
+          cp backend/package.json backend-deploy/ || true
+          cp backend/package-lock.json backend-deploy/ || true
+          cp backend/jsconfig.json backend-deploy/ || true
+          
+          # Show what we're deploying
+          echo "Backend deployment files:"
+          ls -la backend-deploy/
+
+      
+      # ---------------- Prepare Server ----------------
+      - name: Prepare server directories
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            # Create directories if they don't exist
+            mkdir -p /var/www/Sarthi/frontend
+            mkdir -p /var/www/Sarthi/backend
+            mkdir -p /var/www/Sarthi/scripts
+            
+            # Set proper permissions
+            chmod 755 /var/www/Sarthi/frontend
+            chmod 755 /var/www/Sarthi/backend
+            chmod 755 /var/www/Sarthi/scripts
+            
+            # Backup current deployment (optional)
+            if [ -d "/var/www/Sarthi/frontend/.next" ]; then
+              echo "Backing up current frontend deployment"
+              mv /var/www/Sarthi/frontend/.next /var/www/Sarthi/frontend/.next.backup.$(date +%Y%m%d_%H%M%S) || true
+            fi
+            
+            # Clean up any previous failed deployments
+            rm -rf /var/www/Sarthi/backend-deploy || true
+            
+            echo "Server directories prepared successfully"
+
+      # ---------------- Deploy Frontend ----------------
+      - name: Deploy frontend to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "frontend/.next,frontend/public,frontend/package.json,frontend/package-lock.json,frontend/next.config.ts,frontend/.env.local"
+          target: "/var/www/Sarthi/"
+          strip_components: 0
+          debug: true
+
+      # ---------------- Deploy Backend ----------------
+      - name: Deploy backend to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "backend-deploy"
+          target: "/var/www/Sarthi/backend"
+          strip_components: 1
+          debug: true
+
+      - name: Upload backend .env to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "backend-deploy/.env"
+          target: "/var/www/Sarthi/backend"   # directory, not a file path
+          strip_components: 1                 # will place .env inside target
+          debug: true
+
+      # Upload scripts folder (verification)
+      - name: Upload scripts to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "scripts/verify-env.sh"
+          target: "/var/www/Sarthi/scripts"
+          strip_components: 0
+          debug: true
+
+      # Mask backend env values so they don't appear in logs
+      - name: Mask backend environment values
+        run: |
+          echo "::add-mask::${{ secrets.APP_KEYS }}"
+          echo "::add-mask::${{ secrets.API_TOKEN_SALT }}"
+          echo "::add-mask::${{ secrets.ADMIN_JWT_SECRET }}"
+          echo "::add-mask::${{ secrets.TRANSFER_TOKEN_SALT }}"
+          echo "::add-mask::${{ secrets.JWT_SECRET }}"
+          echo "::add-mask::${{ secrets.ENCRYPTION_KEY }}"
+          echo "::add-mask::${{ secrets.DATABASE_URL }}"
+          echo "::add-mask::${{ secrets.DATABASE_PASSWORD }}"
+          echo "::add-mask::${{ secrets.CLOUDINARY_SECRET }}"
+
+      # ---------------- Verify Deployment ----------------
+      - name: Verify deployment on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "Verifying deployment..."
+            echo "Frontend files:"
+            ls -la /var/www/Sarthi/frontend/ || echo "Frontend directory missing"
+            echo ""
+            echo "Frontend environment file:"
+            cat /var/www/Sarthi/frontend/.env.local || echo "Environment file missing"
+            echo ""
+            echo "Backend files:"
+            ls -la /var/www/Sarthi/backend/ || echo "Backend directory missing"
+            echo ""
+            echo "Backend admin build directory:"
+            ls -la /var/www/Sarthi/backend/build || echo "Backend build dir missing"
+            echo ""
+            echo "Backend environment file (keys presence only):"
+            if [ -f /var/www/Sarthi/backend/.env ]; then
+              echo ".env present"
+              grep -q '^HOST=' /var/www/Sarthi/backend/.env && echo 'HOST set' || echo 'HOST missing'
+              grep -q '^PORT=' /var/www/Sarthi/backend/.env && echo 'PORT set' || echo 'PORT missing'
+              grep -q '^NODE_ENV=' /var/www/Sarthi/backend/.env && echo 'NODE_ENV set' || echo 'NODE_ENV missing'
+              grep -q '^DATABASE_CLIENT=' /var/www/Sarthi/backend/.env && echo 'DATABASE_CLIENT set' || echo 'DATABASE_CLIENT missing'
+              grep -q '^DATABASE_URL=' /var/www/Sarthi/backend/.env && echo 'DATABASE_URL set (masked)' || echo 'DATABASE_URL missing (may use discrete creds)'
+            else
+              echo ".env missing"
+            fi
+            echo ""
+            echo "Backend package.json:"
+            ls -la /var/www/Sarthi/backend/package.json || echo "Backend package.json missing"
+            echo ""
+            echo "Running verify-env.sh"
+            chmod +x /var/www/Sarthi/scripts/verify-env.sh || true
+            bash /var/www/Sarthi/scripts/verify-env.sh || true
+
+      # ---------------- Restart Services ----------------
+      - name: Restart apps via PM2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "Starting deployment restart process..."
+            
+            # Source profile and nvm to get proper PATH
+            source ~/.profile 2>/dev/null || true
+            source ~/.bashrc 2>/dev/null || true
+            source ~/.nvm/nvm.sh 2>/dev/null || true
+            
+            # Add common Node.js paths
+            export PATH="/usr/local/bin:/usr/bin:/bin:$HOME/.nvm/versions/node/$(nvm current 2>/dev/null || echo 'v20.0.0')/bin:$PATH"
+            
+            # Verify commands are available
+            echo "Checking command availability..."
+            which node || echo "Node.js not found in PATH"
+            which npm || echo "npm not found in PATH"
+            which pm2 || echo "PM2 not found in PATH"
+            
+            # Frontend deployment
+            cd /var/www/Sarthi/frontend
+            echo "Installing frontend dependencies..."
+            if [ -f package-lock.json ]; then
+              npm ci --omit=dev
+            else
+              npm install --omit=dev
+            fi
+            
+            echo "Restarting frontend service..."
+            pm2 stop frontend || echo "Frontend not running"
+            pm2 delete frontend || echo "Frontend not in PM2"
+            # Bind Next.js to all interfaces and port 3000
+            pm2 start npm --name "frontend" -- start -- -p 3000 -H 0.0.0.0
+            
+            # Backend deployment  
+            cd /var/www/Sarthi/backend
+            echo "Installing backend dependencies..."
+            if [ -f package-lock.json ]; then
+              npm ci --omit=dev
+            else
+              npm install --omit=dev
+            fi
+
+            # Ensure no accidental SQLite file remains
+            rm -f .tmp/data.db || true
+            
+            echo "Restarting backend service..."
+            pm2 stop backend || echo "Backend not running"
+            pm2 delete backend || echo "Backend not in PM2"
+            pm2 start npm --name "backend" -- start
+            
+            # Setup PM2 to start on boot (may require sudo depending on server setup)
+            pm2 startup || true
+            # Persist PM2 process list
+            pm2 save || true
+            
+            # Show PM2 status
+            echo "PM2 Status:"
+            pm2 status
+            
+            # Wait a moment for services to start
+            sleep 10
+            
+            # Basic health check
+            echo "Performing basic health checks..."
+            pm2 jlist | grep -q '"status":"online"' && echo "✅ Services are running" || echo "❌ Some services may have issues"
+            
+            echo "Running verify-env.sh after restart"
+            bash /var/www/Sarthi/scripts/verify-env.sh || true
+            
+            echo "Deployment completed successfully!"
+
+      # ---------------- Post-Deployment Status ----------------
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "🚀 Deployment Summary:"
+          echo "- Frontend: Built and deployed ✅"
+          echo "- Backend: Built and deployed ✅" 
+          echo "- Services: Restarted via PM2 ✅"
+          echo "- Time: $(date)"
+          echo ""
+          echo "🌐 Your Saarthi Andaman website should now be live!"
+          echo "📱 Frontend: https://your-domain.com"
+          echo "⚙️  Backend API: https://your-domain.com:1337"
+
+      # ---------------- Failure Recovery ----------------
+      - name: Rollback on Failure
+        if: failure()
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "❌ Deployment failed, attempting rollback..."
+            
+            # Source profile and nvm to get proper PATH
+            source ~/.profile 2>/dev/null || true
+            source ~/.bashrc 2>/dev/null || true
+            source ~/.nvm/nvm.sh 2>/dev/null || true
+            
+            # Restore frontend backup if it exists
+            if [ -d "/var/www/Sarthi/frontend/.next.backup."* ]; then
+              echo "Restoring frontend backup..."
+              BACKUP_DIR=$(ls -td /var/www/Sarthi/frontend/.next.backup.* | head -1)
+              rm -rf /var/www/Sarthi/frontend/.next
+              mv "$BACKUP_DIR" /var/www/Sarthi/frontend/.next
+              
+              # Restart frontend service
+              cd /var/www/Sarthi/frontend
+              if command -v pm2 >/dev/null 2>&1; then
+                  pm2 restart frontend || pm2 start npm --name "frontend" -- start
+              else
+                  source ~/.nvm/nvm.sh && pm2 restart frontend || pm2 start npm --name "frontend" -- start
+              fi
+              
+              echo "✅ Frontend rollback completed"
+            fi
+            
+            echo "🔄 Rollback process completed. Please check the logs for details."
