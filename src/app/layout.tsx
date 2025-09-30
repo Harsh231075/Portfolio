@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 // import { Poppins } from 'next/font/google'
 import "./globals.css";
+import Script from 'next/script';
 
 
 // const poppins = Poppins({
@@ -29,6 +30,14 @@ export default function RootLayout({
       <body
       // className={poppins.variable}
       >
+        {/* Google Analytics - gtag (placed in layout so it's loaded once site-wide) */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=G-G51SJM0P6M || 'G-G51SJM0P6M'}`}
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${process.env.NEXT_PUBLIC_GA_ID || 'G-G51SJM0P6M'}');`}
+        </Script>
         {children}
       </body>
     </html>
