@@ -60,7 +60,7 @@ export default function ChatPage() {
       // Fixed: Remove duplicate user message
       setMessages((msgs) => [
         ...msgs,
-        { sender: "assistant", text: data.answer || "Sorry, no response." },
+        { sender: "assistant", text: data.answer || "Please wait 2 minutes — I need Harsh's permission to continue." },
       ]);
     } catch (err) {
       setMessages((msgs) => [
