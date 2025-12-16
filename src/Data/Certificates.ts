@@ -2,6 +2,18 @@
 
 const certificates = [
   {
+    id: 7,
+    title: "SIH Finalist 2025",
+    description: "Selected as a Smart India Hackathon 2025 Finalist showcasing innovative problem-solving, teamwork, and end-to-end project execution at a national level.",
+    image: "/cartificate/sih-finalist-2025.jpg"
+  },
+  {
+    id: 8,
+    title: "Void Hack 7.0",
+    description: "Achieved Runner-up position in Void Hack 7.0 hackathon, demonstrating technical excellence and innovative solutions.",
+    image: "/cartificate/void-hack-7.jpeg"
+  },
+  {
     id: 1,
     title: "Win VoidHack6.0 hackathon",
     description: "Comprehensive certification covering advanced React patterns, state management, and performance optimization.",
@@ -38,6 +50,8 @@ const certificates = [
     title: "HTML & CSS",
     description: "Comprehensive course covering the fundamentals of HTML5 and CSS3 for creating modern, responsive websites.",
     image: "/cartificate/c-1.jpeg"
-  }
+  },
+ 
+  
 ];
 export default certificates;

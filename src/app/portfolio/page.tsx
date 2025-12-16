@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Eye, Github, Info, Filter } from 'lucide-react';
+import { Eye, Github, Filter } from 'lucide-react';
 import MobileBottomNav from '@/components/MobileNav';
 import Chat from '@/components/Chat';
 import { useRouter } from 'next/navigation';
@@ -21,24 +21,23 @@ interface ImageCardProps {
   link?: string;
 }
 
-const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, imageSrc, GitHub, link }) => {
+const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, imageSrc, GitHub }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const router = useRouter();
   const handleMouseEnter = () => setIsHovered(true);
-
-  const handleGithub = (link: string) => {
-    <a href={link} target="_blank" rel="noopener noreferrer"></a>
-  };
-
-  const handleView = (link: string) => {
-    <a href={link} target="_blank" rel="noopener noreferrer"></a>
-
-  };
+  const handleMouseLeave = () => setIsHovered(false);
 
   const handleDetails = (id: string) => {
-
     router.push(`/portfolio/${id}`);
+  };
 
+  const handleCardClick = () => {
+    handleDetails(id);
+  };
+
+  // Stop propagation for buttons so they don't trigger card click
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
   };
 
   return (
@@ -46,15 +45,18 @@ const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, imageSrc,
       <div
         className="relative w-full max-w-sm group cursor-pointer overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-3xl"
         onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleCardClick}
         style={{ height: 320 }} // fixed height for card
       >
         <div className="relative w-full h-full aspect-[4/3]">
           <Image
-            className="w-full h-full object-cover rounded-2xl bg-black"
+            className="object-cover rounded-2xl bg-black"
             src={imageSrc}
             alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             loading="lazy"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           />
           <div className={`absolute inset-0 bg-black/20 bg-opacity-30 transition-all duration-300 rounded-2xl ${isHovered ? 'bg-opacity-50' : ''}`} />
           <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent rounded-b-2xl transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -64,26 +66,32 @@ const ImageCard: React.FC<ImageCardProps> = ({ id, title, description, imageSrc,
         </div>
 
         <div className={`absolute top-4 left-4 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-          <button onClick={() => GitHub && handleGithub(GitHub)} className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110">
-            <a href={GitHub} target="_blank" rel="noopener noreferrer">    <Github size={16} /> </a>
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-              GitHub
-            </div>
-          </button>
+          {GitHub && (
+            <a 
+              href={GitHub} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              onClick={handleButtonClick}
+              className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110 inline-block"
+            >
+              <Github size={16} />
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                GitHub
+              </div>
+            </a>
+          )}
         </div>
 
         <div className={`absolute top-4 right-4 flex gap-2 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-          <button onClick={() => link && handleView(link)} className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110">
-            <a href={link} target="_blank" rel="noopener noreferrer"> <Eye size={16} /></a>
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-              View
-            </div>
-          </button>
-
-
-          <button onClick={() => link && handleDetails(id)} className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110">
-            <Info size={16} />
-            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+          <button
+            onClick={(e) => {
+              handleButtonClick(e);
+              handleDetails(id);
+            }}
+            className="group/btn relative bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 transform hover:scale-110 inline-block"
+          >
+            <Eye size={16} />
+            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-2 py-1 rounded text-xs opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
               Details
             </div>
           </button>

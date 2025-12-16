@@ -20,7 +20,7 @@ const Header = () => {
 
           {/* Download CV Button */}
           <Link
-            href="/Harsh-singh.pdf"
+            href="/Resume-Harsh singh baghel.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-red-600 text-white text-sm px-4 py-2 rounded-full hover:bg-red-500 transition-colors shadow"
