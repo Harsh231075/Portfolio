@@ -12,14 +12,21 @@ const {
   GENAI_API_KEY,
 } = process.env;
 
-const ai = new GoogleGenAI({ apiKey: GENAI_API_KEY! });
+function getAIClient() {
+  return new GoogleGenAI({ apiKey: GENAI_API_KEY || "dummy-key" });
+}
 
-const client = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN!);
-const db = client.db(ASTRA_DB_API_ENDPOINT!, {
-  keyspace: ASTRA_DB_NAMESPACE!,
-});
+function getDb() {
+  const endpoint = ASTRA_DB_API_ENDPOINT || "https://dummy-endpoint.astra.datastax.com";
+  const client = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN || "dummy-token");
+  return client.db(endpoint, {
+    keyspace: ASTRA_DB_NAMESPACE || "default_keyspace",
+  });
+}
 
 export const searchRelevantChunks = async (query: string) => {
+  const ai = getAIClient();
+  const db = getDb();
   const embedding = await ai.models.embedContent({
     model: "text-embedding-004",
     contents: query,
@@ -29,7 +36,7 @@ export const searchRelevantChunks = async (query: string) => {
   if (!vector || vector.length === 0) {
     throw new Error("Failed to generate embedding.");
   }
-  const collection = await db.collection(ASTRA_DB_COLLECTION!);
+  const collection = await db.collection(ASTRA_DB_COLLECTION || "default_collection");
   const cursor = collection.find(
     {},
     {

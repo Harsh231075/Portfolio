@@ -4,10 +4,12 @@ import systemInstructions from "../Data/system";
 
 dotenv.config();
 
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+// Lazily initialize Groq client when needed
+function getGroqClient() {
+  return new Groq({
+    apiKey: process.env.GROQ_API_KEY || "dummy-key",
+  });
+}
 
 // Define message type
 type ChatMessage = {
@@ -61,7 +63,7 @@ export const getGroqChatResponse = async (question: string, context: string, ses
   let lastErr: unknown = null;
   for (const model of MODEL_CANDIDATES) {
     try {
-      const response = await groq.chat.completions.create({
+      const response = await getGroqClient().chat.completions.create({
         model,
         messages,
         temperature: 0.7,
