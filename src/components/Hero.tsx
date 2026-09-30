@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 // import SimpleAIAssistant from "@/3d/model"
 
-const Counter = ({ target, label }: { target: number; label: string }) => {
+const Counter = ({ target, label, isFloat = false }: { target: number; label: string; isFloat?: boolean }) => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Counter = ({ target, label }: { target: number; label: string }) => {
   return (
     <div className="text-center shrink-0 min-w-[150px] bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-gray-800">
       <div className="text-2xl md:text-4xl font-bold text-white mb-1">
-        {Math.floor(count)}<span className="text-red-500">+</span>
+        {isFloat ? count.toFixed(1) : Math.floor(count)}<span className="text-red-500">+</span>
       </div>
       <div className="text-gray-400 text-xs md:text-sm">{label}</div>
     </div>
@@ -116,7 +116,7 @@ const Hero = () => {
             </div>
             {/* Floating Boxes - Desktop */}
             <div className="hidden lg:flex flex-col gap-6 absolute top-1/2 transform -translate-y-1/2 -right-16 z-10">
-              <Counter target={3} label="Months of experience" />
+              <Counter target={1.5} label="Years of experience" isFloat={true} />
               <Counter target={15} label="Completed projects" />
               <Counter target={12} label="Hackathons participated" />
             </div>
@@ -124,7 +124,7 @@ const Hero = () => {
             {/* Floating Boxes - Mobile */}
             {/* <div className="lg:hidden flex flex-wrap justify-center gap-4 px-4 mt-6"> */}
 
-            {/* <Counter target={2} label="Years of experience" />
+            {/* <Counter target={1.5} label="Years of experience" isFloat={true} />
               <Counter target={15} label="Completed projects" />
               <Counter target={12} label="Hackathons participated" /> */}
             {/* </div> */}
