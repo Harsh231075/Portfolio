@@ -32,7 +32,10 @@ export default async function ProjectDetailsPage({ params }: ProjectPageProps) {
         </Link>
         <header className="mb-7 flex flex-wrap items-end justify-between gap-5">
           <div className="max-w-2xl">
-            {project.archived && <p className="mb-3 text-xs text-amber-200">Earlier work · {project.size} project</p>}
+            <p className={`mb-3 w-fit rounded-full border px-3 py-1 text-xs font-medium ${project.archived ? 'border-amber-800/60 bg-amber-950/40 text-amber-200' : 'border-teal-800/60 bg-teal-950/40 text-teal-300'}`}>
+              {project.archived ? `Outdated project · ${project.size}` : 'Latest project'}
+            </p>
+            {project.archived && <p className="mb-3 text-sm text-amber-200/80">Built around 1–1.5 years ago.</p>}
             <p className="mb-3 text-xs uppercase tracking-widest text-teal-300">{project.kind}</p>
             <h1 className="font-serif text-4xl font-bold sm:text-5xl">{project.title}</h1>
             <p className="mt-4 text-sm leading-7 text-gray-300 sm:text-base">{project.description}</p>
@@ -76,7 +79,8 @@ export default async function ProjectDetailsPage({ params }: ProjectPageProps) {
             <h2 className="mb-4 font-serif text-xl font-bold">At a glance</h2>
             <dl className="space-y-4 text-sm">
               <div><dt className="mb-1 text-xs text-gray-400">Category</dt><dd>{project.category}</dd></div>
-              {project.size && <div><dt className="mb-1 text-xs text-gray-400">Project type</dt><dd>{project.size} project · Earlier work</dd></div>}
+              <div><dt className="mb-1 text-xs text-gray-400">Project status</dt><dd className={project.archived ? 'text-amber-200' : 'text-teal-300'}>{project.archived ? 'Outdated project · Built around 1–1.5 years ago' : 'Latest project'}</dd></div>
+              {project.size && <div><dt className="mb-1 text-xs text-gray-400">Project type</dt><dd>{project.size} project</dd></div>}
               {project.createdDate && <div><dt className="mb-1 text-xs text-gray-400">Created</dt><dd>{project.createdDate}</dd></div>}
               {project.duration && <div><dt className="mb-1 text-xs text-gray-400">Duration</dt><dd>{project.duration}</dd></div>}
               {project.teamSize && <div><dt className="mb-1 text-xs text-gray-400">Team</dt><dd>{project.teamSize}</dd></div>}

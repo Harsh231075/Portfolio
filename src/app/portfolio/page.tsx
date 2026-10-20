@@ -8,11 +8,12 @@ import Footer from '@/components/Footer';
 import Chat from '@/components/Chat';
 import MobileBottomNav from '@/components/MobileNav';
 
-const categories = ['All projects', 'Latest work', 'Major projects', 'Mini projects'] as const;
+const categories = ['All projects', 'Latest work', 'Outdated projects', 'Major projects', 'Mini projects'] as const;
 type Category = (typeof categories)[number];
 
 const matchesCategory = (project: (typeof projects)[number], category: Category) => {
   if (category === 'Latest work') return !project.archived;
+  if (category === 'Outdated projects') return Boolean(project.archived);
   if (category === 'Major projects') return project.size === 'Major';
   if (category === 'Mini projects') return project.size === 'Mini';
   return true;
@@ -29,7 +30,7 @@ export default function ProjectGallery() {
         <header className="mb-8 border-b border-gray-800 pb-7">
           <p className="mb-3 text-xs uppercase tracking-widest text-teal-300">Portfolio / All work</p>
           <h1 className="font-serif text-4xl font-bold sm:text-5xl">Projects</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-400 sm:text-base">Explore my latest work alongside earlier major and mini projects, with screenshots, project details, and source code.</p>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-400 sm:text-base">Explore my latest work alongside major and mini projects built around 1–1.5 years ago. Older work is marked “Outdated project” so you can see how my work has progressed.</p>
         </header>
         <div role="group" aria-label="Filter projects by category" className="mb-6 flex flex-wrap gap-2">
           {categories.map(item => {

@@ -158,4 +158,6 @@ const earlierProjects: PortfolioProject[] = [...legacyProjects]
     featured: false,
   }));
 
-export default [...projects, ...earlierProjects];
+const allProjects = [...projects, ...earlierProjects];
+
+export default allProjects;

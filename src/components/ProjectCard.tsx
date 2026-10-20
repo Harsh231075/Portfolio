@@ -16,10 +16,13 @@ export default function ProjectCard({ project }: { project: PortfolioProject }) 
         />
       </Link>
       <div className="flex flex-1 flex-col p-5">
-        {project.archived && (
-          <p className="mb-3 text-[11px] text-amber-200">Earlier work · {project.size} project</p>
-        )}
-        <p className="mb-2 text-[11px] font-medium uppercase tracking-wider text-teal-300">{project.kind}</p>
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <p className="min-w-0 flex-1 text-[11px] font-medium uppercase tracking-wider break-words text-teal-300">{project.kind}</p>
+          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium ${project.archived ? 'border-amber-800/60 bg-amber-950/40 text-amber-200' : 'border-teal-800/60 bg-teal-950/40 text-teal-300'}`}>
+            {project.archived ? `Outdated project · ${project.size}` : 'Latest project'}
+          </span>
+        </div>
+        {project.archived && <p className="mb-3 text-xs leading-5 text-amber-200/80">Built around 1–1.5 years ago.</p>}
         <h3 className="font-serif text-2xl font-bold text-white">
           <Link href={`/portfolio/${project.id}`} className="rounded-sm hover:text-teal-300 focus-visible:outline-2 focus-visible:outline-teal-400">
             {project.title}
@@ -31,7 +34,7 @@ export default function ProjectCard({ project }: { project: PortfolioProject }) 
             <li key={tag} className="rounded-md border border-gray-700 bg-gray-800/70 px-2 py-1 text-[11px] leading-4 text-gray-300">{tag}</li>
           ))}
         </ul>
-        {project.archived && <p className="mb-3 text-xs leading-5 text-gray-400">Live demo no longer maintained. Explore screenshots and source code.</p>}
+        {project.archived && <p className="mb-3 text-xs leading-5 text-gray-400">Original screenshots and source code available.</p>}
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-gray-800 pt-4">
           {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${project.title} live site (opens in a new tab)`} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-teal-400 px-3 text-xs font-semibold text-gray-950 transition-colors hover:bg-teal-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-400">
             Visit live site <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
