@@ -1,293 +1,161 @@
-const project = [
+import legacyProjects from './LegacyProjects';
+
+export interface PortfolioProject {
+  id: string;
+  title: string;
+  category: 'AI & Learning' | 'Travel' | 'Business' | 'Web Development';
+  kind: string;
+  description: string;
+  overview: string;
+  image: string;
+  imageAlt: string;
+  liveUrl?: string;
+  archived?: boolean;
+  size?: 'Major' | 'Mini';
+  githubUrl?: string;
+  images?: string[];
+  techStack?: string[];
+  longDescription?: string;
+  videoUrl?: string;
+  createdDate?: string;
+  duration?: string;
+  teamSize?: string;
+  tags: string[];
+  features: string[];
+  featured: boolean;
+}
+
+const projects: PortfolioProject[] = [
   {
-    id: 1,
-    title: "NextGen Learn",
-    subtitle: "Unlock Your True Potential with AI-Powered Personalized Learning!",
-    description: "NextGen Learn is an AI-powered e-learning platform designed to revolutionize online education through personalized learning paths, real-time AI assistance, and engaging gamification. Unlike traditional platforms, it offers adaptive roadmaps, instant doubt resolution via AI chatbots, community collaboration, and a rewarding 'earn while you learn' system to keep learners motivated and progressing effectively.",
-    longDescription: "NextGen Learn addresses the limitations of current e-learning systems by integrating AI-driven personalization, instant doubt-solving, and interactive gamification. The platform analyzes each learner’s performance to create customized roadmaps, recommends resources dynamically, and uses AI chatbots for real-time guidance. Learners can collaborate in an active community, track their progress on leaderboards, and even monetize their contributions. Built with React, Next.js, Node.js, MongoDB, and Tailwind CSS, the system ensures scalability, responsiveness, and a superior user experience.",
-    images: [
-      "/projects/NextGen/Banner.png",
-      "/projects/NextGen/dashboard.png",
-      "/projects/NextGen/n-3.png",
-      "/projects/NextGen/test.png",
-      "/projects/NextGen/result.png",
-      "/projects/NextGen/feedback.png",
-      "/projects/NextGen/n-7.png",
-      "/projects/NextGen/n-8.png",
-      "/projects/NextGen/n-9.png",
-      "/projects/NextGen/cartifaicate.png",
-      "/projects/NextGen/reffreral.png",
-    ],
-    techStack: [
-      "React", "Next.js", "TypeScript", "Node.js", "MongoDB",
-      "Tailwind CSS", "Redux", "Express.js", "JWT", "Stripe API",
-      "LangChain", "Gemini API", "Socket.IO", "Cloudinary"
-    ],
+    id: 'trao-ai',
+    title: 'Trao.ai',
+    category: 'AI & Learning',
+    kind: 'Interview preparation',
+    description: 'AI-powered interview preparation built around a target company, job description, and personal study plan.',
+    overview: 'Trao.ai presents a guided approach to interview preparation. Its five-stage workflow brings together company research, job requirement analysis, question generation, coverage review, and a structured study schedule. The public landing page introduces the product and links to the preparation workspace.',
+    image: '/projects/current/trao-ai.webp',
+    imageAlt: 'Trao.ai landing page with a blue hero and interview dashboard preview',
+    liveUrl: 'https://client-two-pi-58.vercel.app/landing',
+    tags: ['AI interview prep', 'Company research', 'Study planning'],
     features: [
-      "AI-powered personalized learning paths based on strengths and weaknesses",
-      "Instant AI chatbot for real-time doubt resolution",
-      "Dynamic resource recommendations tailored to performance",
-      "Gamified leaderboards with badges, points, and challenges",
-      "Earn while you learn – monetize mentorship and contributions",
-      "Community collaboration for peer-to-peer learning and mentorship",
-      "Performance tracking with detailed analytics and reports",
-      "Secure authentication using JWT and role-based access control",
-      "Responsive, accessible, and scalable design across all devices",
-      "Integrated media storage and optimization via Cloudinary"
+      'Five-stage preparation pipeline from company research to study scheduling.',
+      'Role-specific technical, system design, and behavioral question preparation.',
+      'Job description analysis that separates essential and optional skills.',
+      'Personalized study timelines and spaced flashcard practice.',
     ],
-    liveUrl: "https://next-gen-learn-eta.vercel.app/",
-    githubUrl: "https://github.com/Harsh231075/NextGen_Learn",
-    videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7323334143931564033?compact=1",
-    createdDate: "17 May 2025",
-    category: "Full Stack",
-    status: "Completed",
-    duration: "3 months",
-    teamSize: "solo",
-    stats: {
-      stars: 2,
-      forks: 15,
-      watchers: 8
-    },
+    featured: true,
   },
   {
-    id: 2,
-    title: "NextGen Learn Lite",
-    subtitle: "AI-Powered Self-Learning Platform 1.0 is Live!",
-    description:
-      "NextGen Learn Lite is a personalized AI-powered learning platform built with the MERN stack and Gemini AI API. It helps learners choose the right study path, track their progress, and improve performance through AI-driven guidance, quizzes, and performance tracking. This is the lite version of the upcoming full-scale NextGen Learn platform.",
-    longDescription:
-      "NextGen Learn Lite 1.0 focuses on providing essential AI learning tools in a simplified version of the main platform. It includes AI-powered study path recommendations, weekly personalized study plans, AI-generated quizzes with instant feedback, and weakness detection with resource suggestions. Learners can compete on leaderboards, earn certificates, and benefit from a referral rewards system. The intuitive dashboard gives a complete overview of progress, plans, and recommendations. Version 2.0 will introduce more advanced AI features, deeper personalization, and an enhanced user experience.",
-    images: [
-      "/projects/SelfLearning/home.png",
-      "/projects/SelfLearning/dashboard.png",
-      "/projects/SelfLearning/path.png",
-      "/projects/SelfLearning/login.png",
-      "/projects/SelfLearning/chat.png",
-    ],
-    techStack: [
-      "React", "Node.js", "MongoDB", "Express.js", "Tailwind CSS",
-      "JWT", "Gemini AI API"
-    ],
+    id: 'saarthi-andaman',
+    title: 'Saarthi Andaman',
+    category: 'Travel',
+    kind: 'Travel & tourism website',
+    description: 'An Andaman travel website for exploring holiday packages, island destinations, hotels, and activities.',
+    overview: 'Saarthi Andaman helps travelers discover the Andaman Islands and plan their visit. Visitors can browse tour packages by trip type and price, explore island guides, find hotels and activities, and send a travel enquiry. Destination content, travel articles, reviews, and FAQs support the trip planning experience.',
+    image: '/projects/current/saarthi-andaman.webp',
+    imageAlt: 'Saarthi Andaman travel website showing its island holiday hero and tour packages',
+    liveUrl: 'https://saarthiandaman.com/',
+    tags: ['Tour packages', 'Destination guides', 'Travel enquiries'],
     features: [
-      "AI Learning Guidance based on user interests",
-      "Personalized weekly study plans generated by AI",
-      "AI-generated quizzes with instant performance feedback",
-      "Weakness detection and resource recommendations",
-      "Leaderboard with points and certificates",
-      "Referral system with rewards",
-      "User-friendly dashboard for progress tracking"
+      'Tour package browsing with trip categories and price filters.',
+      'Island and sightseeing guides for Andaman destinations.',
+      'Hotel, activity, and ferry information accessible from the navigation.',
+      'Travel enquiries, WhatsApp contact, articles, reviews, and FAQs.',
     ],
-    liveUrl: "https://self-learning-4xv7.vercel.app/",
-    githubUrl: "https://github.com/Harsh231075/Self_Learning",
-    videoUrl: "https://drive.google.com/file/d/1YczeS_LZw2EHhckDSGP2vGXb8i9VQAtM/preview",
-    createdDate: " 02 may 2025",
-    category: "Full Stack + AI",
-    status: "Completed",
-    duration: "2 months",
-    teamSize: "solo",
-    stats: {
-      stars: 0,
-      forks: 0,
-      watchers: 0
-    }
+    featured: false,
   },
   {
-    id: 4,
-    title: "College Website (Frontend Only)",
-    subtitle: "A modern, responsive, and interactive college website built with React.js and Tailwind CSS.",
-    description:
-      "A comprehensive frontend-only college website showcasing courses, campus, faculty, clubs, events, facilities, and the admission process. Built with React.js and Tailwind CSS, the website offers an intuitive, visually appealing, and fully responsive design for seamless navigation.",
-    longDescription:
-      "Designed and developed a complete frontend college website using React.js and Tailwind CSS. The platform covers key aspects of a college's online presence including courses offered, campus life, faculty details, student clubs, events, facilities, and an easy-to-follow admission process. This project emphasizes modern frontend development practices, a clean component-based architecture, and interactive UI design for an engaging user experience. All visuals have been enhanced with a curated set of photographs from multiple colleges to create a realistic look and feel. The project does not include backend functionality, focusing entirely on frontend development. Open to future enhancements, including backend integration and additional interactive features.",
-    images: [
-      "/projects/college/home.png",
-      "/projects/college/c-2.png",
-      "/projects/college/c-3.png",
-      "/projects/college/c-4.png",
-      "/projects/college/c-5.png",
-      "/projects/college/c-6.png",
-      "/projects/college/c-6.png",
-      "/projects/college/c-7.png"
-    ],
-    techStack: [
-      "React",
-      "Tailwind CSS",
-      "JavaScript",
-      "Vite" // agar tum Vite use kiya ho to
-    ],
+    id: 'asian-extrusions',
+    title: 'Asian Extrusions',
+    category: 'Business',
+    kind: 'Manufacturing website',
+    description: 'A corporate website showcasing aluminium extrusion products, manufacturing expertise, and quality standards.',
+    overview: 'Asian Extrusions presents the company’s aluminium extrusion capabilities through a product-focused corporate website. It brings company information, product categories, quality practices, and contact channels into a clear browsing experience for prospective customers. The home page also displays a reference aluminium price.',
+    image: '/projects/current/asian-extrusions.webp',
+    imageAlt: 'Asian Extrusions website with aluminium profile photography and a blue corporate hero',
+    liveUrl: 'https://www.asianextrusions.com/',
+    tags: ['Product showcase', 'Manufacturing', 'Corporate website'],
     features: [
-      "Fully responsive and mobile-friendly design",
-      "Course catalog with detailed descriptions",
-      "Interactive campus overview",
-      "Faculty and staff profiles",
-      "Student clubs and event highlights",
-      "Facilities showcase",
-      "Step-by-step admission process",
-      "Modern component-based architecture"
+      'Dedicated company, products, quality, and contact pages.',
+      'Manufacturing capabilities and custom extrusion information.',
+      'Industry applications and environmental health and safety content.',
+      'Aluminium reference price display and direct business contact links.',
     ],
-    liveUrl: "https://college-hazel.vercel.app/",
-    githubUrl: "https://github.com/Harsh231075/College",
-    videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7287426422204211202?compact=1",
-    createdDate: "01 april 2025",
-    category: "Frontend",
-    status: "Completed",
-    duration: "2 weeks",
-    teamSize: "solo",
-    stats: {
-      stars: 0,
-      forks: 0,
-      watchers: 0
-    }
+    featured: false,
   },
   {
-    id: 3,
-    title: "Full-Stack E-Commerce Platform",
-    subtitle: "A powerful MERN stack e-commerce platform with secure authentication, product management, and a seamless shopping experience.",
-    description:
-      "A full-stack e-commerce platform built with the MERN stack (MongoDB, Express, React, Node.js) featuring secure user/admin authentication, robust product management, and a responsive shopping experience.",
-    longDescription:
-      "This project is a full-stack e-commerce platform developed using the MERN stack (MongoDB, Express, React, Node.js). It integrates user and admin authentication, a comprehensive product management system, and an intuitive user interface for browsing and purchasing products. Users can register, log in securely using JWT authentication, browse products, and contact the admin through the platform. Admins can monitor sales, manage products, and oversee user activities. The frontend is built with React.js and React Router, while the backend is powered by Node.js, Express.js, and MongoDB for data storage. JWT ensures secure and role-based access. Fully responsive and optimized for all devices, this application is designed for scalability and maintainability, making it ready for future enhancements. Please note: data may take 40-50 seconds to load from the backend.",
-    images: [
-      "/projects/ecommerce/home.png",
-      "/projects/ecommerce/e-2.png",
-      "/projects/ecommerce/e-3.png",
-      "/projects/ecommerce/e-4.png",
-      "/projects/ecommerce/e-5.png",
-      "/projects/ecommerce/e-6.png",
-      "/projects/ecommerce/e-7.png",
-      "/projects/ecommerce/e-8.png",
-
-    ],
-    techStack: [
-      "React",
-      "React Router",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "JWT",
-      "Tailwind CSS"
-    ],
+    id: 'itinova',
+    title: 'Itinova',
+    category: 'Travel',
+    kind: 'Travel workflow product',
+    description: 'A travel agency product for turning client enquiries into editable itineraries and branded quotations.',
+    overview: 'Itinova introduces a connected workflow for travel agencies: start with a client enquiry, shape a day-wise itinerary, arrange hotels and services, set pricing, and prepare a branded quotation. The public site demonstrates the workflow and document previews, with a personal demo available through WhatsApp. Billing is shown as an illustrative preview.',
+    image: '/projects/current/itinova.webp',
+    imageAlt: 'Itinova landing page with a dark green design and a sample travel enquiry',
+    liveUrl: 'https://itinova.tryouts.workers.dev/',
+    tags: ['Itinerary planning', 'Travel quotations', 'Document previews'],
     features: [
-      "Secure JWT-based user and admin authentication",
-      "Product catalog browsing with detailed views",
-      "Add to cart and checkout functionality",
-      "Contact admin via platform messaging",
-      "Admin dashboard with sales and user statistics",
-      "Product management: add, edit, delete products",
-      "User management and query handling",
-      "Fully responsive design for all devices"
+      'Client enquiry entry with a sample travel request.',
+      'Day-wise itinerary, hotel, service, and pricing workflow presentation.',
+      'Branded quotation, confirmation, and logistics document previews.',
+      'Billing preview and WhatsApp booking for a personal product demo.',
     ],
-    liveUrl: "https://shoping-git-main-harsh-singhs-projects-a7a5f95c.vercel.app/",
-    githubUrl: "https://github.com/Harsh231075/shoping",
-    videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7280515010886352897?compact=1",
-    createdDate: "15 december 2024",
-    category: "Full Stack",
-    status: "Completed",
-    duration: "1 month",
-    teamSize: "solo",
-    stats: {
-      stars: 0,
-      forks: 0,
-      watchers: 0
-    }
-  },
-
-  {
-    id: 5,
-    title: "Code Review Pro",
-    subtitle: "An AI-powered code review and learning platform with typing test and certification.",
-    description:
-      "Code Review Pro integrates AI APIs in the backend to automate code reviews, provide improvement suggestions, and help users enhance their coding skills. It also offers a typing test feature with certificates for performance.",
-    longDescription:
-      "Code Review Pro is a mini-project designed to integrate AI APIs in the backend for automated code reviews and skill enhancement. Users can submit code in any programming language and receive AI-generated feedback, including mistake identification and suggestions for improvement. The platform also includes a typing test feature, allowing users to assess their typing speed and accuracy, and earn a certificate based on performance. This project provided valuable experience in backend development, API integration, and AI-based automation. Special thanks to Kritagya Jaiswal for creating an amazing project video!",
-    images: [
-      "/code/c-1.png",
-      "/code/c-2.png",
-      "/code/c-3.png",
-      "/code/c-4.png",
-      "/code/c-5.png"
-    ],
-    techStack: [
-      "React",
-      "Node.js",
-      "Express.js",
-      "Tailwind CSS",
-      "AI API Integration",
-      "JavaScript"
-    ],
-    features: [
-      "AI-powered code review for multiple programming languages",
-      "Mistake detection and improvement suggestions",
-      "Typing test with accuracy and speed tracking",
-      "Automatic certificate generation based on performance",
-      "Clean and responsive UI design"
-    ],
-    liveUrl: "https://code-review-pro.vercel.app/",
-    githubUrl: "https://github.com/Harsh231075/CodeReviewPro",
-    videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7306889432056406016?compact=1",
-    createdDate: "01 february 2025",
-    category: "Full Stack",
-    status: "Completed",
-    duration: "1 week",
-    teamSize: "solo",
-    stats: {
-      stars: 0,
-      forks: 0,
-      watchers: 0
-    }
+    featured: true,
   },
   {
-    id: 6,
-    title: "LinkShort — URL Shortener App",
-    subtitle: "A full-stack URL shortener with analytics, authentication, and user-specific dashboards.",
-    description:
-      "LinkShort is a full-stack URL shortener application built with React, Node.js, and MongoDB. It allows users to shorten long URLs, view analytics, and manage personal URL history with secure authentication.",
-    longDescription:
-      "LinkShort is a complete URL shortener platform that provides both functionality and analytics for users. Built using React.js, Node.js, Express.js, and MongoDB, it enables users to shorten long URLs instantly, view click counts, and filter by date or popularity. JWT authentication ensures secure login/register functionality, and each user has their own dashboard to manage URLs. The application also includes features like copy-to-clipboard, visit buttons, and filtering options. Zustand is used for global state management, and the platform is fully responsive with a clean Tailwind CSS UI. Deployed on Vercel (frontend) and Render (backend) for a production-ready experience.",
-    images: [
-      "/linkshort/u-1.png",
-      "/linkshort/u-2.png",
-      "/linkshort/u-3.png",
-      "/linkshort/u-4.png",
-      "/linkshort/u-5.png",
-      "/linkshort/u-6.png"
-    ],
-    techStack: [
-      "React",
-      "Tailwind CSS",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "JWT",
-      "Zustand"
-    ],
+    id: 'prashnivo',
+    title: 'Prashnivo',
+    category: 'AI & Learning',
+    kind: 'AI teaching workspace',
+    description: 'An AI teaching workspace concept for school papers, answer evaluation, and organized teaching resources.',
+    overview: 'Prashnivo showcases a school-focused teaching workspace through interactive product previews. The site demonstrates school-formatted question papers, sample answer evaluation with teacher review, and a resource library for reusable teaching materials. Schools can explore the concept and request a personal walkthrough.',
+    image: '/projects/current/prashnivo.webp',
+    imageAlt: 'Prashnivo landing page showing a teacher workspace, sample paper, answer evaluation, and resource library',
+    liveUrl: 'https://prashnivo-sigma.vercel.app/',
+    tags: ['Question papers', 'Answer evaluation', 'Teaching resources'],
     features: [
-      "Instant URL shortening",
-      "User authentication via JWT (Login/Register)",
-      "User-specific URL history",
-      "Click count and creation date tracking",
-      "Filter URLs by date range",
-      "Filter by click count",
-      "Copy short URL and visit buttons",
-      "Profile dashboard with stats",
-      "Global state management with Zustand",
-      "Fully responsive UI"
+      'Interactive teacher workspace with illustrative school content.',
+      'Question paper preview organized by school, class, subject, and marks.',
+      'Sample AI answer evaluation with marks, feedback, and teacher review.',
+      'Teaching library preview and a school demo request flow.',
     ],
-    liveUrl: "https://url-shortner-lemon-rho.vercel.app/",
-    githubUrl: "https://github.com/Harsh231075/url_shortner",
-    createdDate: "15 july 2025",
-    category: "Full Stack",
-    status: "Completed",
-    duration: "1 week",
-    teamSize: "solo",
-    stats: {
-      stars: 0,
-      forks: 0,
-      watchers: 0
-    }
-  }
+    featured: true,
+  },
+];
 
-]
+const legacyCards: Record<number, { image: string; description: string; category: PortfolioProject['category'] }> = {
+  1: { image: '/projects/NextGen/p2.png', description: 'AI-powered personalized learning with study roadmaps, real-time assistance, and gamification.', category: 'AI & Learning' },
+  2: { image: '/projects/SelfLearning/p1.png', description: 'A self-learning platform with AI study plans, quizzes, and progress tracking.', category: 'AI & Learning' },
+  3: { image: '/projects/ecommerce/p4.png', description: 'A full-stack shopping platform with user and admin authentication and product management.', category: 'Business' },
+  4: { image: '/projects/college/p5.png', description: 'A responsive college website showcasing courses, campus life, faculty, and admissions.', category: 'Web Development' },
+  5: { image: '/code/p3.png', description: 'AI-assisted code reviews, improvement suggestions, and a typing test with certification.', category: 'AI & Learning' },
+  6: { image: '/linkshort/p6.png', description: 'A URL shortener with authentication, click analytics, and personal link dashboards.', category: 'Web Development' },
+};
 
+const earlierProjects: PortfolioProject[] = [...legacyProjects]
+  .sort((a, b) => a.id - b.id)
+  .map(project => ({
+    id: String(project.id),
+    title: project.title,
+    category: legacyCards[project.id].category,
+    kind: project.category,
+    description: legacyCards[project.id].description,
+    overview: project.description,
+    longDescription: project.longDescription,
+    image: legacyCards[project.id].image,
+    imageAlt: `${project.title} original project screenshot`,
+    images: [...new Set(project.images)],
+    tags: project.techStack.slice(0, 3),
+    techStack: project.techStack,
+    features: project.features,
+    githubUrl: project.githubUrl,
+    videoUrl: project.videoUrl,
+    createdDate: project.createdDate.trim(),
+    duration: project.duration,
+    teamSize: project.teamSize,
+    archived: true,
+    size: project.id <= 3 ? 'Major' : 'Mini',
+    featured: false,
+  }));
 
-export default project;
+export default [...projects, ...earlierProjects];
