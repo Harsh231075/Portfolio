@@ -107,10 +107,11 @@ const Hero = () => {
             <div className="relative w-full h-[400px] sm:h-[320px] md:h-[360px] lg:h-[600px] mt-0 md:mt-6 lg:mt-0">
 
               <Image
-                src="/new.png"
+                src="/harsh-portrait-transparent.png"
                 alt="Harsh Singh Baghel"
                 fill
-                className="object-cover md:object-contain w-full h-full rounded-xl bg-transparent"
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-contain w-full h-full bg-transparent"
                 priority
               />
             </div>
