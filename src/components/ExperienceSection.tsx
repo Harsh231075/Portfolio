@@ -6,7 +6,7 @@ const experiences = [
     location: 'Remote / India',
     role: 'Full Stack Developer',
     type: 'Full-time',
-    dates: 'Jan 2026 – Present',
+    dates: 'Jan 2026 · Last day scheduled: 1 Nov 2026',
     current: true,
     summary: 'Scalable web applications, AI integration, and end-to-end deployment.',
     highlights: [
@@ -19,11 +19,11 @@ const experiences = [
     ],
   },
   {
-    company: 'MyMoment',
+    company: 'MyMooment',
     location: 'Hyderabad / Remote',
     role: 'Full Stack Developer',
     type: 'Part-time / Contract',
-    dates: 'Nov 2025 – Feb 10, 2026',
+    dates: 'Nov 2025 – 10 Feb (end year unconfirmed)',
     current: false,
     summary: 'Full-stack product features, API integrations, and authentication.',
     highlights: [

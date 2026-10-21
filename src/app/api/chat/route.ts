@@ -2,17 +2,21 @@ import { NextResponse } from 'next/server';
 import { ChatUnavailableError, getChatResponse } from '@/lib/groqChat';
 import { parseChatRequest } from '@/lib/chatRequest';
 import { searchRelevantChunks } from '@/lib/vectorSearch';
+import { isRetrievalConfigured } from '@/lib/ragConfig';
 
-export const maxDuration = 30;
+export const maxDuration = 45;
 
 async function getOptionalContext(question: string): Promise<string> {
-  if (!process.env.ASTRA_DB_API_ENDPOINT || !process.env.ASTRA_DB_APPLICATION_TOKEN || !process.env.ASTRA_DB_COLLECTION || !process.env.GENAI_API_KEY) return '';
+  if (!isRetrievalConfigured()) return '';
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    return await Promise.race([
+    const context = await Promise.race([
       searchRelevantChunks(question),
-      new Promise<string>(resolve => { timer = setTimeout(() => resolve(''), 3000); }),
+      new Promise<string>(resolve => { timer = setTimeout(() => resolve(''), 12000); }),
     ]);
+    if (context) console.info('[chat] Knowledge retrieval succeeded.');
+    else console.warn('[chat] Knowledge retrieval timed out; using portfolio data.');
+    return context;
   } catch {
     console.warn('[chat] Document search unavailable; using portfolio data.');
     return '';
