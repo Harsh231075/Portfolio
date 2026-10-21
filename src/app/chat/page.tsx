@@ -67,7 +67,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0d0f12] text-gray-200" style={{ fontFamily: "'IBM Plex Sans', Arial, sans-serif" }}>
-      <header className="mx-auto flex w-full max-w-3xl shrink-0 items-center justify-between gap-4 border-b border-white/[0.06] px-5 py-4 sm:px-8 sm:py-5">
+      <header className="mx-auto flex w-full max-w-3xl shrink-0 items-center justify-between gap-4 border-b border-white/[0.06] px-5 py-4 sm:px-8 sm:py-5 lg:max-w-4xl">
         <div><h1 className="text-base font-medium tracking-tight text-white sm:text-lg">Harsh’s assistant</h1><p className="mt-1 text-[11px] text-gray-500">Projects, experience, and a little more.</p></div>
         <nav aria-label="Chat navigation" className="flex shrink-0 items-center gap-4 text-xs text-gray-400 sm:gap-6">
           <Link href="/" className="inline-flex min-h-11 items-center hover:text-white focus-visible:outline-1 focus-visible:outline-gray-400">Portfolio</Link>
@@ -80,13 +80,22 @@ export default function ChatPage() {
         onScroll={event => { const el = event.currentTarget; followRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 120; }}
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
       >
-        <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col px-5 py-8 sm:px-8 sm:py-12">
-          <div role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions" className={messages.length === 0 ? 'my-auto' : 'space-y-9'}>
+        <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col px-5 py-8 sm:px-8 sm:py-12 lg:max-w-4xl">
+          <div role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions" className={messages.length === 0 ? 'my-auto lg:mb-0' : 'space-y-9'}>
             {messages.length === 0 && (
-              <div className="mx-auto max-w-md pb-10 text-center">
+              <div className="mx-auto max-w-md pb-10 text-center lg:max-w-2xl lg:pb-3">
                 <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.18em] text-teal-300/80">A conversation about my work</p>
-                <h2 className="text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl">What would you like to know?</h2>
-                <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-gray-500">Ask about Harsh’s projects, experience, or the technologies he works with.</p>
+                <h2 className="text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl lg:text-[40px]">What would you like to know?</h2>
+                <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-gray-500 lg:max-w-md lg:text-base lg:text-gray-400">Ask about Harsh’s projects, experience, or the technologies he works with.</p>
+                <div aria-label="Conversation starters" className="mt-7 hidden items-center justify-center gap-7 text-sm lg:flex">
+                  {[
+                    { label: 'Explore projects', question: 'What are Harsh’s top projects?' },
+                    { label: 'Work experience', question: 'Tell me about Harsh’s professional experience.' },
+                    { label: 'Skills & tools', question: 'What technologies does Harsh work with?' },
+                  ].map(({ label, question }) => (
+                    <button key={label} type="button" onClick={() => void sendMessage(question)} className="min-h-11 border-b border-gray-700 text-gray-400 transition-colors hover:border-teal-400 hover:text-teal-300 focus-visible:outline-1 focus-visible:outline-teal-400">{label}</button>
+                  ))}
+                </div>
               </div>
             )}
             {messages.map((message, index) => (
@@ -120,10 +129,10 @@ export default function ChatPage() {
         </div>
       </main>
 
-      <footer className="mx-auto w-full max-w-3xl shrink-0 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-8">
+      <footer className={`mx-auto w-full max-w-3xl shrink-0 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-8 lg:max-w-4xl ${messages.length === 0 ? 'lg:mb-[clamp(3rem,14vh,10rem)]' : ''}`}>
         <form
           onSubmit={event => { event.preventDefault(); void sendMessage(); }}
-          className="flex items-end gap-4 border-b border-gray-700/80 pb-3 pt-2 transition-colors focus-within:border-teal-500/70"
+          className="flex items-end gap-4 border-b border-gray-700/80 pb-3 pt-2 transition-colors focus-within:border-teal-500/70 lg:pb-4 lg:pt-3"
         >
           <label htmlFor="chat-message" className="sr-only">Your message</label>
           <textarea
