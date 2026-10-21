@@ -99,7 +99,7 @@ export default function ChatPage() {
               </div>
             )}
             {messages.map((message, index) => (
-              <div key={index} className={`min-w-0 ${message.role === 'user' ? 'ml-auto max-w-[85%]' : 'w-full'}`}>
+              <div key={index} className={`min-w-0 ${message.role === 'user' ? 'ml-auto w-fit max-w-[85%] text-right' : 'mr-auto w-full text-left'}`}>
                 <p className={`mb-2 text-[11px] font-medium ${message.role === 'user' ? 'text-gray-500' : 'text-teal-300/80'}`}>{message.role === 'user' ? 'You' : 'Assistant'}</p>
                 {message.role === 'user' ? (
                   <p className="whitespace-pre-wrap break-words text-[15px] leading-7 text-white">{message.content}</p>
