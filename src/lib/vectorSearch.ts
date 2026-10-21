@@ -57,5 +57,9 @@ export async function searchKnowledge(query: string) {
 export async function searchRelevantChunks(query: string): Promise<string> {
   const documents = await searchKnowledge(query);
   if (!documents.length) throw new Error('No knowledge records retrieved.');
+  return formatKnowledgeContext(documents);
+}
+
+export function formatKnowledgeContext(documents: Awaited<ReturnType<typeof searchKnowledge>>): string {
   return documents.map(doc => `[Source: ${doc.source}; section: ${doc.section}]\n${doc.text.slice(0, 1000)}`).join('\n\n');
 }

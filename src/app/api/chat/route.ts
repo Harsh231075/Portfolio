@@ -1,29 +1,9 @@
 import { NextResponse } from 'next/server';
-import { ChatUnavailableError, getChatResponse } from '@/lib/groqChat';
+import { ChatUnavailableError, getChatCompletion } from '@/lib/groqChat';
 import { parseChatRequest } from '@/lib/chatRequest';
-import { searchRelevantChunks } from '@/lib/vectorSearch';
-import { isRetrievalConfigured } from '@/lib/ragConfig';
+import { CHAT_PIPELINE_VERSION, getChatContext } from '@/lib/chatContext';
 
 export const maxDuration = 45;
-
-async function getOptionalContext(question: string): Promise<string> {
-  if (!isRetrievalConfigured()) return '';
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  try {
-    const context = await Promise.race([
-      searchRelevantChunks(question),
-      new Promise<string>(resolve => { timer = setTimeout(() => resolve(''), 12000); }),
-    ]);
-    if (context) console.info('[chat] Knowledge retrieval succeeded.');
-    else console.warn('[chat] Knowledge retrieval timed out; using portfolio data.');
-    return context;
-  } catch {
-    console.warn('[chat] Document search unavailable; using portfolio data.');
-    return '';
-  } finally {
-    clearTimeout(timer);
-  }
-}
 
 export async function POST(req: Request) {
   let payload: ReturnType<typeof parseChatRequest>;
@@ -35,9 +15,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error instanceof SyntaxError ? 'Please send a valid message.' : error instanceof Error ? error.message : 'Please send a valid message.' }, { status: 400 });
   }
   try {
-    const context = await getOptionalContext(payload.question);
-    const answer = await getChatResponse(payload.question, context, payload.history);
-    return NextResponse.json({ answer });
+    const { text: context, debug } = await getChatContext(payload.question);
+    const { answer, provider, model } = await getChatCompletion(payload.question, context, payload.history);
+    return NextResponse.json({ answer, debug: { pipelineVersion: CHAT_PIPELINE_VERSION, ...debug, generation: { provider, model } } }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     return NextResponse.json({ error: error instanceof ChatUnavailableError ? error.message : 'The assistant is temporarily unavailable. Please try again shortly.' }, { status: 503 });
   }

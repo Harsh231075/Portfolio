@@ -3,6 +3,8 @@ import { afterEach, beforeEach, test } from 'node:test';
 import { ChatUnavailableError, getChatResponse } from '../src/lib/groqChat';
 import { parseChatRequest } from '../src/lib/chatRequest';
 import { POST } from '../src/app/api/chat/route';
+import { CHAT_PIPELINE_VERSION, getChatContext } from '../src/lib/chatContext';
+import { EMBEDDING_DIMENSIONS, EMBEDDING_FORMAT, EMBEDDING_MODEL } from '../src/lib/embeddings';
 
 const originalFetch = globalThis.fetch;
 const envNames = ['GROQ_API_KEY', 'GROQ_MODEL', 'GEMINI_API_KEY', 'GEMINI_MODEL', 'GENAI_API_KEY', 'GOOGLE_API_KEY', 'ASTRA_DB_API_ENDPOINT', 'ASTRA_DB_APPLICATION_TOKEN', 'ASTRA_DB_COLLECTION', 'ASTRA_DB_NAMESPACE'] as const;
@@ -122,5 +124,86 @@ test('API answers from current portfolio data when document retrieval is not con
   };
   const response = await POST(new Request('https://portfolio.test/api/chat', { method: 'POST', body: JSON.stringify({ question: 'Tell me about Harsh' }) }));
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { answer: 'Portfolio answer' });
+  const data = await response.json();
+  assert.equal(data.answer, 'Portfolio answer');
+  assert.equal(data.debug.pipelineVersion, CHAT_PIPELINE_VERSION);
+  assert.equal(data.debug.contextSource, 'portfolio_fallback');
+  assert.equal(data.debug.retrieval.status, 'not_configured');
+  assert.deepEqual(data.debug.generation, { provider: 'groq', model: 'openai/gpt-oss-120b' });
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
+});
+
+function configureRetrieval() {
+  process.env.ASTRA_DB_API_ENDPOINT = 'https://test.apps.astra.datastax.com';
+  process.env.ASTRA_DB_APPLICATION_TOKEN = 'PRIVATE-ASTRA-TOKEN';
+  process.env.ASTRA_DB_COLLECTION = 'test_collection';
+}
+
+function retrievalResponse(command: Record<string, unknown>, documents: unknown[]) {
+  if (command.findOne) return Response.json({ data: { document: { knowledge_version: 'test-version', embedding_model: EMBEDDING_MODEL, embedding_dimensions: EMBEDDING_DIMENSIONS, embedding_format: EMBEDDING_FORMAT, chunk_count: documents.length } } });
+  return Response.json({ data: { documents } });
+}
+
+test('API exposes actual retrieved sections and generation provider without raw context or credentials', async () => {
+  configureRetrieval();
+  globalThis.fetch = async (url, init) => {
+    if (String(url).includes('googleapis.com')) return Response.json({ embedding: { values: Array(768).fill(0.1) } });
+    if (String(url).includes('astra.datastax.com')) return retrievalResponse(JSON.parse(init!.body as string), [{ _id: 'education', text: 'Harsh is pursuing B.Tech; his current semester is unconfirmed.', source: 'data/profile-knowledge.md', section: 'Education', knowledge_version: 'test-version' }]);
+    const body = JSON.parse(init!.body as string);
+    assert.match(body.messages[0].content, /current semester is NOT confirmed/);
+    assert.match(body.messages[0].content, /\[Source: data\/profile-knowledge.md; section: Education\]/);
+    return Response.json({ choices: [{ message: { content: 'Harsh is pursuing B.Tech. His exact current semester is unconfirmed.' } }] });
+  };
+  const response = await POST(new Request('https://portfolio.test/api/chat', { method: 'POST', body: JSON.stringify({ question: 'okay harsh are which semester can you tell me', history: [{ role: 'assistant', content: 'He is not enrolled.' }] }) }));
+  const data = await response.json();
+  assert.equal(data.debug.contextSource, 'vector_db');
+  assert.equal(data.debug.portfolioContextIncluded, true);
+  assert.equal(data.debug.retrieval.status, 'success');
+  assert.equal(data.debug.retrieval.method, 'astra-ann');
+  assert.deepEqual(data.debug.retrieval.sources, [{ section: 'Education', source: 'data/profile-knowledge.md', version: 'test-version' }]);
+  assert.doesNotMatch(JSON.stringify(data.debug), /PRIVATE-ASTRA-TOKEN|test-groq-key|Harsh is pursuing/);
+});
+
+test('embedding failure reports portfolio fallback and a safe HTTP reason, even when Gemini generates the answer', async () => {
+  configureRetrieval();
+  globalThis.fetch = async (url) => {
+    if (String(url).includes(':embedContent')) return new Response('PRIVATE error details', { status: 403 });
+    if (String(url).includes('api.groq.com')) return new Response('PRIVATE provider details', { status: 429 });
+    return Response.json({ candidates: [{ content: { parts: [{ text: 'Portfolio answer from Gemini' }] } }] });
+  };
+  const response = await POST(new Request('https://portfolio.test/api/chat', { method: 'POST', body: JSON.stringify({ question: 'What semester?' }) }));
+  const data = await response.json();
+  assert.equal(data.debug.contextSource, 'portfolio_fallback');
+  assert.equal(data.debug.retrieval.status, 'error');
+  assert.equal(data.debug.retrieval.reason, 'embedding_http_403');
+  assert.deepEqual(data.debug.generation, { provider: 'gemini', model: 'gemini-3.5-flash-lite' });
+  assert.doesNotMatch(JSON.stringify(data), /PRIVATE/);
+});
+
+test('empty retrieval and a missing active manifest report different fallback reasons', async () => {
+  configureRetrieval();
+  globalThis.fetch = async (url, init) => String(url).includes('googleapis.com')
+    ? Response.json({ embedding: { values: Array(768).fill(0.1) } })
+    : retrievalResponse(JSON.parse(init!.body as string), []);
+  const empty = await getChatContext('Semester?');
+  assert.equal(empty.debug.retrieval.status, 'empty');
+  assert.equal(empty.debug.contextSource, 'portfolio_fallback');
+  globalThis.fetch = async url => String(url).includes('googleapis.com')
+    ? Response.json({ embedding: { values: Array(768).fill(0.1) } })
+    : Response.json({ data: { document: null } });
+  const missing = await getChatContext('Semester?');
+  assert.equal(missing.debug.retrieval.reason, 'knowledge_not_activated');
+});
+
+test('retrieval deadline explicitly reports timeout rather than success or missing configuration', async t => {
+  configureRetrieval();
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  globalThis.fetch = async () => new Promise<Response>(() => {});
+  const pending = getChatContext('Semester?');
+  t.mock.timers.tick(12000);
+  const result = await pending;
+  assert.equal(result.debug.contextSource, 'portfolio_fallback');
+  assert.equal(result.debug.retrieval.status, 'timeout');
+  assert.equal(result.debug.retrieval.reason, 'retrieval_deadline_exceeded');
+  assert.equal(result.text, '');
 });

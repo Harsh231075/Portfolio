@@ -52,3 +52,35 @@ Edit the public profile or gallery data, review a fresh dry run, then run `--wri
 Live checks found an Astra `INVALID_DATABASE_QUERY` error reporting that the internal vector column lacks its required index, despite the collection reporting vector-enabled settings. Retrieval first attempts native ANN search. For this specific missing-index error only, it reads the active snapshot’s vectors from Astra and computes exact cosine similarity in the server process. This fallback is capped at 256 knowledge records; it is not a local file database or a fallback to static profile text. Other errors still fail retrieval safely. The server logs the retrieval method, and the verification command reports it. Astra’s native index still requires repair before this collection scales beyond the small-profile fallback.
 
 The supplied source draft's review remains in `docs/rag-data-review.md`; its initial empty-database findings describe the pre-import state. Refer to subsequent import and verification results for the latest database state.
+
+## Chat response diagnostics
+
+`POST /api/chat` returns the existing `answer` plus a `debug` object. The chat interface continues displaying only the answer; inspect the response in the browser Network tab to see diagnostics.
+
+```json
+{
+  "answer": "Harsh is pursuing B.Tech Computer Science; his current semester is unconfirmed.",
+  "debug": {
+    "pipelineVersion": "2026-10-21-rag-debug-v1",
+    "contextSource": "vector_db",
+    "portfolioContextIncluded": true,
+    "retrieval": {
+      "status": "success",
+      "method": "exact-cosine",
+      "reason": null,
+      "durationMs": 2400,
+      "chunks": 5,
+      "sources": [
+        { "section": "Education", "source": "data/profile-knowledge.md", "version": "<active knowledge version>" }
+      ]
+    },
+    "generation": { "provider": "groq", "model": "openai/gpt-oss-120b" }
+  }
+}
+```
+
+The example values are illustrative. `vector_db` means retrieved records were actually passed to generation alongside the standard portfolio/system facts. It does not prove that every sentence was derived from a particular record. `sources` lists the supplied sections, not model-inferred citations. `exact-cosine` still uses the vectors stored in Astra; it is distinct from static portfolio fallback.
+
+`portfolio_fallback` means no retrieved context was passed. Check `retrieval.status`: `not_configured`, `timeout`, `empty`, or `error`. `reason` uses fixed safe labels, such as `embedding_http_403`, `astra_timeout`, and `knowledge_not_activated`. The response never includes raw provider errors, credentials, full retrieved text or visitor history. `generation` identifies the provider that actually returned the answer, independently of retrieval.
+
+The pipeline version distinguishes this updated deployment from older API responses that contain only `answer`. Responses use `Cache-Control: no-store`. Education guidance explicitly states that Harsh is pursuing his degree alongside work; his exact semester must remain unconfirmed until he supplies it, regardless of earlier assistant claims in conversation history.
