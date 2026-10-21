@@ -66,10 +66,10 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0a0a0a] text-gray-200" style={{ fontFamily: "'IBM Plex Sans', Arial, sans-serif" }}>
-      <header className="mx-auto flex w-full max-w-3xl shrink-0 items-center justify-between gap-4 px-5 py-4 sm:px-8">
-        <h1 className="text-base font-medium text-white">Chat</h1>
-        <nav aria-label="Chat navigation" className="flex items-center gap-5 text-xs text-gray-400">
+    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0d0f12] text-gray-200" style={{ fontFamily: "'IBM Plex Sans', Arial, sans-serif" }}>
+      <header className="mx-auto flex w-full max-w-3xl shrink-0 items-center justify-between gap-4 border-b border-white/[0.06] px-5 py-4 sm:px-8 sm:py-5">
+        <div><h1 className="text-base font-medium tracking-tight text-white sm:text-lg">Harsh’s assistant</h1><p className="mt-1 text-[11px] text-gray-500">Projects, experience, and a little more.</p></div>
+        <nav aria-label="Chat navigation" className="flex shrink-0 items-center gap-4 text-xs text-gray-400 sm:gap-6">
           <Link href="/" className="inline-flex min-h-11 items-center hover:text-white focus-visible:outline-1 focus-visible:outline-gray-400">Portfolio</Link>
           <button type="button" onClick={newChat} className="min-h-11 hover:text-white focus-visible:outline-1 focus-visible:outline-gray-400">New chat</button>
         </nav>
@@ -80,17 +80,18 @@ export default function ChatPage() {
         onScroll={event => { const el = event.currentTarget; followRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 120; }}
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
       >
-        <div className="mx-auto w-full max-w-3xl px-5 py-6 sm:px-8 sm:py-10">
-          <div role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions" className="space-y-8">
+        <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col px-5 py-8 sm:px-8 sm:py-12">
+          <div role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions" className={messages.length === 0 ? 'my-auto' : 'space-y-9'}>
             {messages.length === 0 && (
-              <div>
-                <p className="mb-2 text-xs text-gray-500">Assistant</p>
-                <p className="text-[15px] leading-7">Hi, ask me anything about Harsh’s work.</p>
+              <div className="mx-auto max-w-md pb-10 text-center">
+                <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.18em] text-teal-300/80">A conversation about my work</p>
+                <h2 className="text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl">What would you like to know?</h2>
+                <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-gray-500">Ask about Harsh’s projects, experience, or the technologies he works with.</p>
               </div>
             )}
             {messages.map((message, index) => (
-              <div key={index} className="min-w-0">
-                <p className="mb-2 text-xs text-gray-500">{message.role === 'user' ? 'You' : 'Assistant'}</p>
+              <div key={index} className={`min-w-0 ${message.role === 'user' ? 'ml-auto max-w-[85%]' : 'w-full'}`}>
+                <p className={`mb-2 text-[11px] font-medium ${message.role === 'user' ? 'text-gray-500' : 'text-teal-300/80'}`}>{message.role === 'user' ? 'You' : 'Assistant'}</p>
                 {message.role === 'user' ? (
                   <p className="whitespace-pre-wrap break-words text-[15px] leading-7 text-white">{message.content}</p>
                 ) : (
@@ -119,10 +120,10 @@ export default function ChatPage() {
         </div>
       </main>
 
-      <footer className="mx-auto w-full max-w-3xl shrink-0 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8">
+      <footer className="mx-auto w-full max-w-3xl shrink-0 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-8">
         <form
           onSubmit={event => { event.preventDefault(); void sendMessage(); }}
-          className="flex items-end gap-4 border-t border-gray-800 py-3 focus-within:border-gray-500"
+          className="flex items-end gap-4 border-b border-gray-700/80 pb-3 pt-2 transition-colors focus-within:border-teal-500/70"
         >
           <label htmlFor="chat-message" className="sr-only">Your message</label>
           <textarea
@@ -138,12 +139,12 @@ export default function ChatPage() {
                 void sendMessage();
               }
             }}
-            placeholder="Message…"
+            placeholder="Ask a question…"
             className="block max-h-36 min-h-12 min-w-0 flex-1 resize-none bg-transparent py-3 text-base leading-6 text-white outline-none placeholder:text-gray-500"
           />
-          <button type="submit" disabled={loading || !input.trim()} className="min-h-12 shrink-0 px-1 text-sm font-medium text-white hover:text-gray-300 focus-visible:outline-1 focus-visible:outline-gray-400 disabled:cursor-not-allowed disabled:text-gray-600">Send</button>
+          <button type="submit" disabled={loading || !input.trim()} className="min-h-12 shrink-0 px-2 text-sm font-medium text-teal-300 hover:text-teal-200 focus-visible:outline-1 focus-visible:outline-gray-400 disabled:cursor-not-allowed disabled:text-gray-600">Send</button>
         </form>
-        <p className="text-[11px] text-gray-600">{input.length > 1800 ? `${input.length}/2000` : 'Enter to send · Shift + Enter for a new line'}</p>
+        <p className="mt-3 text-[11px] text-gray-600">{input.length > 1800 ? `${input.length}/2000` : 'Enter to send · Shift + Enter for a new line'}</p>
       </footer>
     </div>
   );
