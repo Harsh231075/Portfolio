@@ -1,180 +1,150 @@
-"use client";
-import { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
-import { FaHome } from "react-icons/fa";
-import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+'use client';
 
-interface Message {
-  sender: "user" | "assistant";
-  text: string;
-}
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+interface Message { role: 'user' | 'assistant'; content: string }
+
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    { sender: "assistant", text: "Hello! How can I help you today?" },
-  ]);
-  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const inputBarRef = useRef<HTMLDivElement>(null);
-  const [bottomPad, setBottomPad] = useState(140);
+  const [error, setError] = useState<string | null>(null);
+  const [failedQuestion, setFailedQuestion] = useState<string | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const requestRef = useRef<AbortController | null>(null);
+  const busyRef = useRef(false);
+  const followRef = useRef(true);
 
+  useEffect(() => () => requestRef.current?.abort(), []);
   useEffect(() => {
-    const updatePad = () => {
-      if (inputBarRef.current) {
-        setBottomPad(inputBarRef.current.offsetHeight + 48); // bar height + extra space
-      }
-    };
-    updatePad();
-    window.addEventListener("resize", updatePad);
-    return () => window.removeEventListener("resize", updatePad);
-  }, []);
-
+    const area = inputRef.current;
+    if (area) { area.style.height = 'auto'; area.style.height = `${Math.min(area.scrollHeight, 144)}px`; }
+  }, [input]);
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [messages, loading]);
+    if (followRef.current) scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  }, [messages, loading, error]);
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault?.();
-    if (!input.trim()) return;
+  function newChat() {
+    requestRef.current?.abort();
+    requestRef.current = null;
+    busyRef.current = false;
+    followRef.current = true;
+    setMessages([]); setInput(''); setLoading(false); setError(null); setFailedQuestion(null);
+    inputRef.current?.focus({ preventScroll: true });
+  }
 
-    const userMessage = input.trim();
-    setMessages((msgs) => [...msgs, { sender: "user", text: userMessage }]);
-    setInput("");
-    setLoading(true);
-
+  async function sendMessage(question = input, retry = false) {
+    const text = question.trim();
+    if (!text || busyRef.current || text.length > 2000) return;
+    busyRef.current = true;
+    const controller = new AbortController();
+    requestRef.current = controller;
+    const history = (retry ? messages.slice(0, -1) : messages).slice(-30);
+    while (history.reduce((sum, message) => sum + message.content.length, 0) > 12000) history.shift();
+    if (!retry) setMessages(previous => [...previous, { role: 'user', content: text }]);
+    setInput(''); setError(null); setFailedQuestion(null); setLoading(true);
+    followRef.current = true;
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question: userMessage }),
-      });
-
-      const data = await res.json();
-
-      // Fixed: Remove duplicate user message
-      setMessages((msgs) => [
-        ...msgs,
-        { sender: "assistant", text: data.answer || "Please wait 2 minutes — I need Harsh's permission to continue." },
-      ]);
-    } catch (err) {
-      setMessages((msgs) => [
-        ...msgs,
-        { sender: "assistant", text: "Something went wrong." },
-      ]);
-      console.error(err);
+      const response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: text, history }), signal: controller.signal });
+      const data: { answer?: string; error?: string } = await response.json();
+      if (!response.ok || typeof data.answer !== 'string' || !data.answer.trim()) throw new Error(response.ok ? 'The assistant returned an empty reply. Please try again.' : data.error || 'The assistant is temporarily unavailable. Please try again.');
+      const answer = data.answer;
+      if (requestRef.current === controller) setMessages(previous => [...previous, { role: 'assistant', content: answer }]);
+    } catch (cause) {
+      if (!controller.signal.aborted && requestRef.current === controller) {
+        setError(cause instanceof TypeError ? 'Couldn’t connect. Check your connection and try again.' : cause instanceof Error ? cause.message : 'Something went wrong. Please try again.');
+        setFailedQuestion(text);
+      }
     } finally {
-      setLoading(false);
+      if (requestRef.current === controller) { requestRef.current = null; busyRef.current = false; setLoading(false); }
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* Fixed Header - Always visible */}
-      <header className="sticky top-0 w-full z-50 bg-black/60 backdrop-blur text-white py-3 px-4 sm:px-6 flex justify-between items-center shadow-lg border-b border-white/20">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white drop-shadow-sm">
-          My Assistant
-        </h1>
-        <Link href="/" className="hover:scale-110 transition-transform duration-200">
-          <FaHome size={20} className="text-green-800 hover:text-yellow-300" />
-        </Link>
+    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-[#0a0a0a] text-gray-200" style={{ fontFamily: "'IBM Plex Sans', Arial, sans-serif" }}>
+      <header className="mx-auto flex w-full max-w-3xl shrink-0 items-center justify-between gap-4 px-5 py-4 sm:px-8">
+        <h1 className="text-base font-medium text-white">Chat</h1>
+        <nav aria-label="Chat navigation" className="flex items-center gap-5 text-xs text-gray-400">
+          <Link href="/" className="inline-flex min-h-11 items-center hover:text-white focus-visible:outline-1 focus-visible:outline-gray-400">Portfolio</Link>
+          <button type="button" onClick={newChat} className="min-h-11 hover:text-white focus-visible:outline-1 focus-visible:outline-gray-400">New chat</button>
+        </nav>
       </header>
 
-      {/* Main chat area - Full width with smooth scroll */}
       <main
-        className="flex-1 w-full overflow-y-auto overflow-x-hidden p-2 sm:p-4 pb-0 bg-cover bg-center bg-no-repeat bg-fixed scroll-smooth"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://media.istockphoto.com/id/1216688115/vector/seamless-pattern-with-social-media-elements.jpg?s=612x612&w=0&k=20&c=5c_iSGEPfiNFNKsR2cZaix1plXGuTip3gYF9RYSsCIo=')",
-          paddingBottom: bottomPad
-        }}
+        ref={scrollRef}
+        onScroll={event => { const el = event.currentTarget; followRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 120; }}
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
       >
-        <div className="w-full max-w-none space-y-4 mt-2">
-          {messages.map((msg, i) => (
-            <div
-              key={i}
-              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} px-4 sm:px-6 w-full`}
-            >
-              <div
-                className={`px-4 py-3 rounded-2xl max-w-[80%] sm:max-w-[70%] lg:max-w-[60%] shadow-lg transform transition-all duration-200 hover:scale-[1.02] ${msg.sender === "user"
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md"
-                  : "bg-white text-gray-800 rounded-bl-md border-l-4 border-purple-500"
-                  }`}
-              >
-                <div className="text-sm sm:text-base leading-relaxed break-words">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      strong: ({ ...props }) => (
-                        <mark className="bg-yellow-200 px-1 rounded font-semibold" {...props} />
-                      ),
-                      ul: (props) => <ul className="list-disc ml-5 space-y-1" {...props} />,
-                      ol: (props) => <ol className="list-decimal ml-5 space-y-1" {...props} />,
-                      li: (props) => <li className="leading-snug" {...props} />,
-                      p: (props) => <p className="mb-2 last:mb-0" {...props} />,
-                      code: (props) => (
-                        <code className="bg-gray-200 text-pink-600 px-1 py-0.5 rounded text-xs" {...props} />
-                      ),
-                      pre: (props) => (
-                        <pre className="bg-gray-900 text-gray-100 p-3 rounded-md overflow-x-auto text-xs" {...props} />
-                      ),
-                    }}
-                  >
-                    {msg.text}
-                  </ReactMarkdown>
-                </div>
+        <div className="mx-auto w-full max-w-3xl px-5 py-6 sm:px-8 sm:py-10">
+          <div role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions" className="space-y-8">
+            {messages.length === 0 && (
+              <div>
+                <p className="mb-2 text-xs text-gray-500">Assistant</p>
+                <p className="text-[15px] leading-7">Hi, ask me anything about Harsh’s work.</p>
               </div>
-            </div>
-          ))}
-          {loading && (
-            <div className="flex justify-start px-2">
-              <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-lg border-l-4 border-orange-500">
-                <div className="flex items-center space-x-2">
-                  <div className="animate-bounce w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <div className="animate-bounce w-2 h-2 bg-purple-500 rounded-full" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="animate-bounce w-2 h-2 bg-purple-500 rounded-full" style={{ animationDelay: '0.2s' }}></div>
-                  <span className="text-gray-600 text-sm ml-2">Assistant is typing...</span>
-                </div>
+            )}
+            {messages.map((message, index) => (
+              <div key={index} className="min-w-0">
+                <p className="mb-2 text-xs text-gray-500">{message.role === 'user' ? 'You' : 'Assistant'}</p>
+                {message.role === 'user' ? (
+                  <p className="whitespace-pre-wrap break-words text-[15px] leading-7 text-white">{message.content}</p>
+                ) : (
+                  <div className="break-words text-[15px] leading-7 [&_a]:break-all [&_a]:text-gray-100 [&_a]:underline [&_a]:underline-offset-4 [&_strong]:font-semibold [&_strong]:text-white [&_p]:mb-3 [&_p:last-child]:mb-0 [&_ul]:mb-3 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5 [&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_h1]:mb-3 [&_h1]:text-xl [&_h2]:mb-3 [&_h2]:text-lg [&_h3]:mb-2 [&_h3]:font-semibold [&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:py-2 [&_code]:text-xs [&_blockquote]:border-l [&_blockquote]:border-gray-700 [&_blockquote]:pl-4">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        a: ({ children, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer">{children}</a>,
+                        table: ({ children, ...props }) => <div className="my-3 overflow-x-auto"><table {...props} className="w-full border-collapse text-left [&_td]:border-b [&_td]:border-gray-800 [&_td]:p-2 [&_th]:border-b [&_th]:border-gray-700 [&_th]:p-2">{children}</table></div>,
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+                )}
               </div>
+            ))}
+          </div>
+          {loading && <p role="status" className="mt-6 text-sm text-gray-500">Thinking…</p>}
+          {error && (
+            <div role="alert" className="mt-6 text-sm leading-6 text-gray-400">
+              <p>{error}</p>
+              {failedQuestion && <button type="button" onClick={() => void sendMessage(failedQuestion, true)} className="mt-1 min-h-11 text-white underline underline-offset-4">Try again</button>}
             </div>
           )}
-          <div style={{ height: 8 }} />
-          <div ref={bottomRef} />
         </div>
       </main>
 
-      {/* Fixed bottom input bar */}
-      <div
-        ref={inputBarRef}
-        className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 p-3 sm:p-4 shadow-lg"
-      >
-        <div className="max-w-4xl mx-auto">
-          <form onSubmit={sendMessage} className="flex items-center gap-2 sm:gap-3">
-            <input
-              ref={inputRef}
-              className="flex-1 border-2 border-gray-300 bg-white text-gray-800 rounded-full px-4 py-2 sm:py-3 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200 text-sm sm:text-base placeholder-gray-500"
-              type="text"
-              value={input}
-              placeholder="Type your message..."
-              onChange={(e) => setInput(e.target.value)}
-              // disabled={loading}
-              autoFocus
-            />
-            <button
-              type="submit"
-              // disabled={loading || !input.trim()}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-2 sm:p-3 rounded-full hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 shadow-lg"
-            >
-              <Send className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-          </form>
-        </div>
-      </div>
+      <footer className="mx-auto w-full max-w-3xl shrink-0 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8">
+        <form
+          onSubmit={event => { event.preventDefault(); void sendMessage(); }}
+          className="flex items-end gap-4 border-t border-gray-800 py-3 focus-within:border-gray-500"
+        >
+          <label htmlFor="chat-message" className="sr-only">Your message</label>
+          <textarea
+            id="chat-message"
+            ref={inputRef}
+            value={input}
+            maxLength={2000}
+            rows={1}
+            onChange={event => setInput(event.target.value)}
+            onKeyDown={event => {
+              if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+                event.preventDefault();
+                void sendMessage();
+              }
+            }}
+            placeholder="Message…"
+            className="block max-h-36 min-h-12 min-w-0 flex-1 resize-none bg-transparent py-3 text-base leading-6 text-white outline-none placeholder:text-gray-500"
+          />
+          <button type="submit" disabled={loading || !input.trim()} className="min-h-12 shrink-0 px-1 text-sm font-medium text-white hover:text-gray-300 focus-visible:outline-1 focus-visible:outline-gray-400 disabled:cursor-not-allowed disabled:text-gray-600">Send</button>
+        </form>
+        <p className="text-[11px] text-gray-600">{input.length > 1800 ? `${input.length}/2000` : 'Enter to send · Shift + Enter for a new line'}</p>
+      </footer>
     </div>
   );
 }

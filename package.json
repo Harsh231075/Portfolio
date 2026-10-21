@@ -4,16 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
-    "embed-data": "tsx scripts/embedData.ts"
+    "lint": "eslint .",
+    "embed-data": "tsx scripts/embedData.ts",
+    "build:cloudflare": "opennextjs-cloudflare build",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "test:chat": "node --import tsx --test tests/chat.test.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@datastax/astra-db-ts": "^1.5.0",
     "@google/genai": "^1.12.0",
     "@langchain/community": "^0.3.49",
     "@langchain/core": "^0.3.66",
+    "@opennextjs/cloudflare": "1.20.12",
     "@react-three/drei": "^10.3.0",
     "@react-three/fiber": "^9.1.2",
     "@splinetool/react-spline": "^4.0.0",
@@ -23,7 +29,7 @@
     "groq-sdk": "^0.29.0",
     "langchain": "^0.3.30",
     "lucide-react": "^0.518.0",
-    "next": "15.3.8",
+    "next": "16.4.2",
     "pdf-parse": "^1.1.1",
     "puppeteer": "^24.15.0",
     "react": "^19.0.0",
@@ -42,10 +48,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.3.4",
+    "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "4.151.3"
   }
 }

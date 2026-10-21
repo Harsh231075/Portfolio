@@ -1,12 +1,14 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['', 'image.similarpng.com', 'static.vecteezy.com', 'https://images.rawpixel.com',],
-
+    remotePatterns: [
+      { protocol: 'https', hostname: 'image.similarpng.com' },
+      { protocol: 'https', hostname: 'static.vecteezy.com' },
+      { protocol: 'https', hostname: 'images.rawpixel.com' },
+    ],
   },
-  serverExternalPackages: ["puppeteer"],
-
+  serverExternalPackages: ['puppeteer'],
 };
 
 export default nextConfig;
