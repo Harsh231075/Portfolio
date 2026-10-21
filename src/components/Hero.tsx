@@ -97,7 +97,7 @@ const Hero = () => {
             </div>
 
             <p className="text-gray-300 text-sm md:text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 mt-3 lg:mt-4">
-              A full stack developer is someone who uses their skills in both frontend and backend technologies to build complete web applications, handling everything from user interface to server-side logic and databases.
+              I’m a full-stack developer with around 1.5 years of hands-on experience building web applications with MERN and Next.js. I connect AI with real-world workflows through web integrations and automation, while expanding my work in blockchain, Solidity, and MCP servers.
             </p>
           </div>
 
